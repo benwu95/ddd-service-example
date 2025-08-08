@@ -28,7 +28,7 @@ pip install -r requirements_local.txt
     - value object, event
     - repository, orm
     - controller
-    - restful: handler, openapi
+    - handler, openapi
 
 ### Add message queue exchange handler
 1. `python /path/to/ddd-service-template/copy_tool.py add_message_queue_handler exchange_name`
@@ -54,8 +54,9 @@ createdb -O "postgres" default
 ### Set local RabbitMQ
 `docker run -it --rm --name rabbitmq -p 5672:5672 -p 15672:15672 -e RABBITMQ_DEFAULT_USER=root -e RABBITMQ_DEFAULT_PASS=1234 rabbitmq:management`
 
-### Run
-- `make local-run`
+### Run locally
+- server: `make local-run`
+- mq consumer: `make local-run-consumer`
 
 ### Debugging in VSCode
 1. select the Debugging icon > Run and Debug
