@@ -1,4 +1,3 @@
 from .your_bounded_context.your_aggregate_controller import YourAggregateController
 
-
 your_aggregate_controller = YourAggregateController()

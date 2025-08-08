@@ -27,7 +27,7 @@ class EventHandlerHelper:
 
     def connect_db_session(
         self,
-        exception_message: str = '',
+        exception_message: str = "",
     ):
         def inner(func: Callable):
             @wraps(func)
@@ -42,7 +42,9 @@ class EventHandlerHelper:
                         if exception_message:
                             self.logger.warning(exception_message)
                         else:
-                            self.logger.warning('%s event handler failed', type(event).__name__)
+                            self.logger.warning("%s event handler failed", type(event).__name__)
                         raise e
+
             return wrapper
+
         return inner

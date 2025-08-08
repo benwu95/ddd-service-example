@@ -4,7 +4,6 @@ from logging.config import fileConfig
 from sqlalchemy import Connection, engine_from_config, pool, text
 
 from alembic import context
-
 from app.config import config as app_config
 
 # this is the Alembic Config object, which provides
@@ -23,6 +22,7 @@ if config.config_file_name is not None:
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 from app.adapter.repository.orm import Base
+
 target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,
@@ -64,7 +64,7 @@ def run_migrations_offline() -> None:
 
 @contextmanager
 def pg_advisory_lock(connection: Connection):
-    if connection.dialect.name != 'postgresql':
+    if connection.dialect.name != "postgresql":
         yield
         return
 
@@ -76,10 +76,10 @@ def pg_advisory_lock(connection: Connection):
 
     postgres_lock_key = f"'{app_config.postgres_schema}.alembic_version'::regclass::oid::int"
     try:
-        context.execute(f'select pg_advisory_lock({postgres_lock_key})')
+        context.execute(f"select pg_advisory_lock({postgres_lock_key})")
         yield
     finally:
-        context.execute(f'select pg_advisory_unlock({postgres_lock_key})')
+        context.execute(f"select pg_advisory_unlock({postgres_lock_key})")
 
 
 def run_migrations_online() -> None:
@@ -106,7 +106,7 @@ def run_migrations_online() -> None:
         )
 
         # https://stackoverflow.com/questions/73068830/alembic-postgres-how-to-switch-to-another-schema
-        context.execute(f'create schema if not exists {target_metadata.schema}')
+        context.execute(f"create schema if not exists {target_metadata.schema}")
 
         with context.begin_transaction():
             with pg_advisory_lock(connection):

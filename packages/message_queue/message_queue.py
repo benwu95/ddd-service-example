@@ -12,8 +12,8 @@ from pika.exchange_type import ExchangeType
 
 
 class OperationType(Enum):
-    PUBLISH = 'PUBLISH'
-    CONSUME = 'CONSUME'
+    PUBLISH = "PUBLISH"
+    CONSUME = "CONSUME"
 
 
 @dataclass
@@ -27,20 +27,20 @@ class QueueMessage(DataclassMixin):
 
     def _check(self, o: Self):
         if not isinstance(o, QueueMessage):
-            raise TypeError('must be QueueMessage')
+            raise TypeError("must be QueueMessage")
         if o.trace_id != self.trace_id:
-            raise ValueError('trace_id must be same')
+            raise ValueError("trace_id must be same")
         if o.function_name != self.function_name:
-            raise ValueError('function_name must be same')
+            raise ValueError("function_name must be same")
         if not isinstance(o.data, type(self.data)):
-            raise ValueError('data must be same type')
+            raise ValueError("data must be same type")
 
     def __iadd__(self, o: Self) -> Self:
         self._check(o)
         if isinstance(self.data, list):
             self.data.extend(o.data)
         if isinstance(self.data, dict):
-            raise NotImplementedError('data of dict type is not supported')
+            raise NotImplementedError("data of dict type is not supported")
         return self
 
     def to_payload(self) -> dict:
@@ -74,7 +74,7 @@ class MessageQueueConnection:
         queue_name: str | None = None,
         routing_key: str | None = None,
         exchange_name: str | None = None,
-        exchange_type: ExchangeType | None = None
+        exchange_type: ExchangeType | None = None,
     ):
         self.parameters = pika.URLParameters(amqp_url)
         self.operation_type = operation_type
@@ -95,27 +95,22 @@ class MessageQueueConnection:
                     self.channel.exchange_declare(
                         exchange=self.exchange_name,
                         exchange_type=self.exchange_type,
-                        durable=False
+                        durable=False,
                     )
                 case OperationType.CONSUME:
                     self.channel.exchange_declare(
                         exchange=self.exchange_name,
                         exchange_type=self.exchange_type,
-                        durable=False
+                        durable=False,
                     )
-                    self.channel.queue_declare(
-                        queue=self.queue_name,
-                        durable=True
-                    )
+                    self.channel.queue_declare(queue=self.queue_name, durable=True)
                     self.channel.queue_bind(
                         queue=self.queue_name,
                         exchange=self.exchange_name,
-                        routing_key=self.routing_key
+                        routing_key=self.routing_key,
                     )
         except Exception as e:
-            raise connection_workflow.AMQPConnectorException(
-                'Failed to create connection, stopping...'
-            ) from e
+            raise connection_workflow.AMQPConnectorException("Failed to create connection, stopping...") from e
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         if self.connection and self.connection.is_open:

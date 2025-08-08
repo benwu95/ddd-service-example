@@ -2,6 +2,18 @@
     "pylint.args": [
         "--disable=C0111,C0103,E1121,C0301"
     ],
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.black-formatter",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "explicit"
+        },
+    },
+    "isort.args":[
+        "--profile",
+        "black",
+        "--check"
+    ],
     "python.testing.pytestArgs": [
         "tests",
         "--cov=app/adapter",

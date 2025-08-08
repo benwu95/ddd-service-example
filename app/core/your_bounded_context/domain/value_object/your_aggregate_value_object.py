@@ -9,17 +9,17 @@ from app.core.ddd_base import User
 
 
 class YourAggregateStatus(Enum):
-    CREATED = 'created'
-    VOIDED = 'voided'
+    CREATED = "created"
+    VOIDED = "voided"
 
     def __str__(self):
         return self.value
 
 
 class OperationHistoryType(Enum):
-    CREATED = 'created'
-    UPDATED = 'updated'
-    VOIDED = 'voided'
+    CREATED = "created"
+    UPDATED = "updated"
+    VOIDED = "voided"
 
 
 @dataclass(frozen=True)

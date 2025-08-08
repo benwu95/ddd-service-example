@@ -14,7 +14,7 @@ class UseCaseBase:
     @parent_event.setter
     def parent_event(self, value: DomainEvent):
         if not isinstance(value, DomainEvent):
-            raise ValueError('parent_event must be a DomainEvent')
+            raise ValueError("parent_event must be a DomainEvent")
         self._parent_event = value
         self._trace_id = None
 

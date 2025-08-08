@@ -14,9 +14,9 @@ from packages.message_queue.message_queue import (
     MessageQueueConnection,
     MessageQueueConsumerInterface,
     MessageQueuePublisherInterface,
-    QueueMessage,
-    QueueHandler,
     OperationType,
+    QueueHandler,
+    QueueMessage,
 )
 
 
@@ -25,7 +25,7 @@ class RabbitMqPublisher(MessageQueuePublisherInterface):
         self,
         amqp_url: str,
         exchange_name: str,
-        exchange_type: ExchangeType = ExchangeType.topic
+        exchange_type: ExchangeType = ExchangeType.topic,
     ):
         self.logger = logging.getLogger(self.__class__.__name__)
 
@@ -33,7 +33,7 @@ class RabbitMqPublisher(MessageQueuePublisherInterface):
             amqp_url,
             OperationType.PUBLISH,
             exchange_name=exchange_name,
-            exchange_type=exchange_type
+            exchange_type=exchange_type,
         )
         self.messages: dict[str, dict[str, QueueMessage]] = {}
 
@@ -47,8 +47,10 @@ class RabbitMqPublisher(MessageQueuePublisherInterface):
         else:
             if routing_key not in self.messages:
                 self.messages[routing_key] = {}
-            function_name = message.function_name if isinstance(message.function_name, str) else message.function_name.value
-            m_key = f'{message.trace_id}_{function_name}'
+            function_name = (
+                message.function_name if isinstance(message.function_name, str) else message.function_name.value
+            )
+            m_key = f"{message.trace_id}_{function_name}"
             if m_key not in self.messages[routing_key]:
                 self.messages[routing_key][m_key] = message
             else:
@@ -61,34 +63,42 @@ class RabbitMqPublisher(MessageQueuePublisherInterface):
                 for routing_key, messages in copy_messages.items():
                     for m_key, message in messages.items():
                         payload = message.to_payload()
-                        self.logger.info('publish message to %s', routing_key, extra={'detail': payload, 'traceId': message.trace_id})
+                        self.logger.info(
+                            "publish message to %s",
+                            routing_key,
+                            extra={"detail": payload, "traceId": message.trace_id},
+                        )
                         if not self.connection.channel:
-                            raise RuntimeError('Publish channel not found')
+                            raise RuntimeError("Publish channel not found")
                         self.connection.channel.basic_publish(
                             exchange=self.connection.exchange_name,
                             routing_key=routing_key,
-                            body=json.dumps(payload)
+                            body=json.dumps(payload),
                         )
-                        self.logger.info('publish complete', extra={'traceId': message.trace_id})
+                        self.logger.info("publish complete", extra={"traceId": message.trace_id})
                         self.messages[routing_key].pop(m_key)
                 self.messages = {}
         except Exception as e:
-            self.logger.error('publish messages error: %s', e)
+            self.logger.error("publish messages error: %s", e)
 
     def publish_raw_message(self, routing_key: str, message: dict, message_logging: bool = True):
         with self.connection:
-            trace_id = message.get('traceId')
+            trace_id = message.get("traceId")
             if message_logging:
-                self.logger.info('publish message to %s', routing_key, extra={'detail': message, 'traceId': trace_id})
+                self.logger.info(
+                    "publish message to %s",
+                    routing_key,
+                    extra={"detail": message, "traceId": trace_id},
+                )
             if not self.connection.channel:
-                raise RuntimeError('Publish channel not found')
+                raise RuntimeError("Publish channel not found")
             self.connection.channel.basic_publish(
                 exchange=self.connection.exchange_name,
                 routing_key=routing_key,
-                body=json.dumps(message)
+                body=json.dumps(message),
             )
             if message_logging:
-                self.logger.info('publish complete', extra={'traceId': trace_id})
+                self.logger.info("publish complete", extra={"traceId": trace_id})
 
 
 class RabbitMqConsumer(MessageQueueConsumerInterface):
@@ -98,12 +108,12 @@ class RabbitMqConsumer(MessageQueueConsumerInterface):
         queue_name: str,
         routing_key: str,
         exchange_name: str,
-        exchange_type: ExchangeType = ExchangeType.topic
+        exchange_type: ExchangeType = ExchangeType.topic,
     ):
         signal.signal(signal.SIGINT, self.exit_gracefully)
         signal.signal(signal.SIGTERM, self.exit_gracefully)
         self.kill_now = False
-        self.logger = logging.getLogger(f'{self.__class__.__name__}:{queue_name}')
+        self.logger = logging.getLogger(f"{self.__class__.__name__}:{queue_name}")
 
         self.routing_key = routing_key
         self.connection = MessageQueueConnection(
@@ -112,12 +122,12 @@ class RabbitMqConsumer(MessageQueueConsumerInterface):
             queue_name=queue_name,
             routing_key=routing_key,
             exchange_name=exchange_name,
-            exchange_type=exchange_type
+            exchange_type=exchange_type,
         )
         self.publisher = RabbitMqPublisher(amqp_url, exchange_name, exchange_type)
 
     def exit_gracefully(self, signalnum, handler):
-        self.logger.info('Stop consuming...')
+        self.logger.info("Stop consuming...")
         try:
             if self.connection.channel:
                 self.connection.channel.stop_consuming()
@@ -130,7 +140,7 @@ class RabbitMqConsumer(MessageQueueConsumerInterface):
             ch: pika.channel.Channel,
             method: pika.spec.Basic.Deliver,
             properties: pika.spec.BasicProperties,
-            body: bytes
+            body: bytes,
         ):
             # data: raw data
             # message: `QueueMessage`, data is snake case
@@ -140,58 +150,69 @@ class RabbitMqConsumer(MessageQueueConsumerInterface):
             try:
                 if message.started:
                     if message.started < pendulum.now():
-                        self.logger.info('message', extra={'detail': data, 'traceId': message.trace_id})
+                        self.logger.info(
+                            "message",
+                            extra={"detail": data, "traceId": message.trace_id},
+                        )
                         handler(message)
                     else:
-                        self.publisher.publish_raw_message(self.routing_key, message.to_payload(), message_logging=False)
+                        self.publisher.publish_raw_message(
+                            self.routing_key,
+                            message.to_payload(),
+                            message_logging=False,
+                        )
                 else:
-                    self.logger.info('message', extra={'detail': data, 'traceId': message.trace_id})
+                    self.logger.info("message", extra={"detail": data, "traceId": message.trace_id})
                     handler(message)
             except Exception as e:
                 message.started = pendulum.now().add(seconds=message.retry_delay_second)
 
                 if message.attempt_number == -1:
-                    self.logger.warning('Consume failed: %s', e, extra={'traceId': message.trace_id})
-                    self.logger.info('Retry message', extra={'traceId': message.trace_id})
+                    self.logger.warning("Consume failed: %s", e, extra={"traceId": message.trace_id})
+                    self.logger.info("Retry message", extra={"traceId": message.trace_id})
                     self.publisher.publish_raw_message(self.routing_key, message.to_payload(), message_logging=False)
                 else:
                     message.attempt_number -= 1
                     if message.attempt_number > 0:
-                        self.logger.warning('Consume failed: %s', e, extra={'traceId': message.trace_id})
-                        self.logger.info('Retry message, remaining %s times', message.attempt_number, extra={'traceId': message.trace_id})
-                        self.publisher.publish_raw_message(self.routing_key, message.to_payload(), message_logging=False)
+                        self.logger.warning("Consume failed: %s", e, extra={"traceId": message.trace_id})
+                        self.logger.info(
+                            "Retry message, remaining %s times",
+                            message.attempt_number,
+                            extra={"traceId": message.trace_id},
+                        )
+                        self.publisher.publish_raw_message(
+                            self.routing_key,
+                            message.to_payload(),
+                            message_logging=False,
+                        )
                     else:
-                        self.logger.exception('Consume failed: %s', e, extra={'traceId': message.trace_id})
+                        self.logger.exception("Consume failed: %s", e, extra={"traceId": message.trace_id})
 
             ch.basic_ack(delivery_tag=method.delivery_tag)
 
         with self.connection:
             self.logger.info(
-                'Start consuming %s from %s by %s',
+                "Start consuming %s from %s by %s",
                 self.connection.queue_name,
                 self.connection.exchange_name,
-                self.connection.routing_key
+                self.connection.routing_key,
             )
             while not self.kill_now:
                 try:
                     if not self.connection.channel:
-                        raise RuntimeError('Consume channel not found')
-                    self.connection.channel.basic_consume(
-                        self.connection.queue_name,
-                        rabbitmq_handler,
-                        auto_ack=False
-                    )
+                        raise RuntimeError("Consume channel not found")
+                    self.connection.channel.basic_consume(self.connection.queue_name, rabbitmq_handler, auto_ack=False)
                     self.connection.channel.start_consuming()
                 except pika.exceptions.ConnectionClosedByBroker:
-                    self.logger.error('Connection was closed by broker, retrying...')
+                    self.logger.error("Connection was closed by broker, retrying...")
                     self.connection.connection.sleep(1)
                     continue
                 # Do not recover on channel errors
                 except pika.exceptions.AMQPChannelError as err:
-                    self.logger.error('Caught a channel error: %s, stopping...', err)
+                    self.logger.error("Caught a channel error: %s, stopping...", err)
                     break
                 # Recover on all other connection errors
                 except pika.exceptions.AMQPConnectionError:
-                    self.logger.error('Connection was closed, retrying...')
+                    self.logger.error("Connection was closed, retrying...")
                     self.connection.connection.sleep(1)
                     continue

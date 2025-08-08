@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from app.core.ddd_base import User, DomainEvent
+from app.core.ddd_base import DomainEvent, User
 from app.core.your_bounded_context.domain.value_object.your_aggregate_value_object import (
     YourValueObject,
 )

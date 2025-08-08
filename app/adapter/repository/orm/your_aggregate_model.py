@@ -1,4 +1,4 @@
-from sqlalchemy import String, UUID
+from sqlalchemy import UUID, String
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -13,8 +13,8 @@ class YourAggregateMixin(BaseMixin):
 
 
 class YourAggregateModel(YourAggregateMixin, Base):
-    __tablename__ = 'your_aggregate'
+    __tablename__ = "your_aggregate"
 
 
 class YourAggregateArchiveModel(ArchiveMixin, YourAggregateMixin, Base):
-    __tablename__ = 'your_aggregate_archive'
+    __tablename__ = "your_aggregate_archive"

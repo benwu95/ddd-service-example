@@ -7,8 +7,7 @@ from connexion import request
 from dataclass_mixins import DataclassMixin
 from werkzeug.local import LocalProxy
 
-
-_trace_id = ContextVar('trace_id')
+_trace_id = ContextVar("trace_id")
 _trace_id.set(None)
 
 
@@ -16,7 +15,7 @@ def set_trace_id(trace_id: str | None = None):
     t = trace_id
     if t is None:
         try:
-            t = request.headers.get('X-Trace-Id')
+            t = request.headers.get("X-Trace-Id")
         except Exception:
             pass
     if t is None:
@@ -30,7 +29,7 @@ def get_trace_id() -> str:
     return _trace_id.get()
 
 
-_request_start_time = ContextVar('request_start_time')
+_request_start_time = ContextVar("request_start_time")
 _request_start_time.set(None)
 request_start_time: float | None = LocalProxy(_request_start_time)  # type: ignore[assignment]
 
@@ -74,7 +73,7 @@ class TokenInfo(DataclassMixin):
         return self.__dict__.get(key, default)
 
 
-_token_info = ContextVar('token_info')
+_token_info = ContextVar("token_info")
 _token_info.set(None)
 token_info: TokenInfo | None = LocalProxy(_token_info)  # type: ignore[assignment]
 

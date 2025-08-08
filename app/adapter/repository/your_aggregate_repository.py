@@ -1,7 +1,7 @@
 import pendulum
+from pendulum.datetime import DateTime
 from sqlalchemy import and_, or_
 from sqlalchemy.orm import InstrumentedAttribute, load_only
-from pendulum.datetime import DateTime
 
 from app.adapter.repository.base import RepositoryBase, SearchKeyField
 from app.adapter.repository.orm import (
@@ -25,7 +25,7 @@ from app.core.your_bounded_context.domain.value_object.your_aggregate_value_obje
 class YourAggregateRepository(RepositoryBase, YourAggregateRepositoryInterface):
     @staticmethod
     def entity_name() -> str:
-        return 'Your Aggregate'
+        return "Your Aggregate"
 
     @staticmethod
     def model_class() -> type[YourAggregateModel]:
@@ -37,15 +37,11 @@ class YourAggregateRepository(RepositoryBase, YourAggregateRepositoryInterface):
 
     @staticmethod
     def search_key_fields() -> dict[str, SearchKeyField]:
-        return {
-            'your_value_object_a': SearchKeyField(YourAggregateModel.your_value_object, json_path='$.property_a')
-        }
+        return {"your_value_object_a": SearchKeyField(YourAggregateModel.your_value_object, json_path="$.property_a")}
 
     @staticmethod
     def sort_by_fields() -> dict[str, InstrumentedAttribute]:
-        return {
-            'created_at': YourAggregateModel.created_at
-        }
+        return {"created_at": YourAggregateModel.created_at}
 
     @staticmethod
     def model_to_entity(model: YourAggregateModel) -> YourAggregate:
@@ -59,14 +55,10 @@ class YourAggregateRepository(RepositoryBase, YourAggregateRepositoryInterface):
             [OperationHistory.create(**h) for h in model.operation_histories],
             User(**model.creator),
             pendulum.from_timestamp(model.created_at.timestamp()),
-            pendulum.from_timestamp(model.updated_at.timestamp()) if model.updated_at else None,
+            (pendulum.from_timestamp(model.updated_at.timestamp()) if model.updated_at else None),
         )
 
-    async def load_your_aggregate(
-        self,
-        your_aggregate_id: str,
-        lock: bool = True
-    ) -> YourAggregate:
+    async def load_your_aggregate(self, your_aggregate_id: str, lock: bool = True) -> YourAggregate:
         obj = await self._load(your_aggregate_id, lock)
         return obj
 
@@ -90,7 +82,7 @@ class YourAggregateRepository(RepositoryBase, YourAggregateRepositoryInterface):
         statuses: list[str] | None = None,
         date_fields: list[str] | None = None,
         start_time: DateTime | None = None,
-        end_time: DateTime | None = None
+        end_time: DateTime | None = None,
     ) -> list:
         filters = []
         # jsonb search example
@@ -140,23 +132,10 @@ class YourAggregateRepository(RepositoryBase, YourAggregateRepositoryInterface):
         search_keys: list[str] | None = None,
         sort_by: list[str] | None = None,
         offset: int = 0,
-        limit: int = 0
+        limit: int = 0,
     ) -> SearchResult:
-        filters = self._get_search_filters(
-            ids,
-            statuses,
-            date_fields,
-            start_time,
-            end_time
-        )
-        total, items = await self._search(
-            filters,
-            search_key_fields or [],
-            search_keys,
-            sort_by or [],
-            offset,
-            limit
-        )
+        filters = self._get_search_filters(ids, statuses, date_fields, start_time, end_time)
+        total, items = await self._search(filters, search_key_fields or [], search_keys, sort_by or [], offset, limit)
         return SearchResult(total, items)
 
     async def search_your_aggregate_models(
@@ -171,18 +150,17 @@ class YourAggregateRepository(RepositoryBase, YourAggregateRepositoryInterface):
         sort_by: list[str] | None = None,
         offset: int = 0,
         limit: int = 0,
-        load_fields: list[str] | None = None
+        load_fields: list[str] | None = None,
     ) -> list[YourAggregateModel]:
-        filters = self._get_search_filters(
-            ids,
-            statuses,
-            date_fields,
-            start_time,
-            end_time
-        )
+        filters = self._get_search_filters(ids, statuses, date_fields, start_time, end_time)
         options = []
         if load_fields:
-            options.append(load_only(*[getattr(YourAggregateModel, f) for f in load_fields], raiseload=True))
+            options.append(
+                load_only(
+                    *[getattr(YourAggregateModel, f) for f in load_fields],
+                    raiseload=True,
+                )
+            )
         _, results = await self._search(
             filters,
             search_key_fields or [],
@@ -191,6 +169,6 @@ class YourAggregateRepository(RepositoryBase, YourAggregateRepositoryInterface):
             offset,
             limit,
             options,
-            return_entity=False
+            return_entity=False,
         )
         return results

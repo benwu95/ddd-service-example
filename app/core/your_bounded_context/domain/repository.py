@@ -8,7 +8,7 @@ from app.core.your_bounded_context.domain.entity.your_aggregate import YourAggre
 
 
 class SearchDateField(Enum):
-    CREATED_AT = 'created_at'
+    CREATED_AT = "created_at"
 
 
 @dataclass(frozen=True)
@@ -40,6 +40,6 @@ class YourAggregateRepositoryInterface(metaclass=abc.ABCMeta):
         search_keys: list[str] | None = None,
         sort_by: list[str] | None = None,
         offset: int = 0,
-        limit: int = 0
+        limit: int = 0,
     ) -> SearchResult:
         pass

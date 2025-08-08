@@ -6,12 +6,7 @@ from openpyxl import Workbook
 from openpyxl.cell import Cell
 
 
-def create_xlsx(
-    title: str,
-    dc_type: type,
-    dc_list: list,
-    output_fields: list[str] | None = None
-) -> BytesIO:
+def create_xlsx(title: str, dc_type: type, dc_list: list, output_fields: list[str] | None = None) -> BytesIO:
     """
     Creates an excel file from a list of dataclasses.
 
@@ -30,15 +25,15 @@ def create_xlsx(
     ws.title = title
 
     if output_fields is not None:
-        fields_mapping = {f.name: f.metadata.get('alias', f.name) for f in dataclasses.fields(dc_type)}
+        fields_mapping = {f.name: f.metadata.get("alias", f.name) for f in dataclasses.fields(dc_type)}
         fields = [(f, fields_mapping.get(f, f)) for f in output_fields]
     else:
-        fields = [(f.name, f.metadata.get('alias', f.name)) for f in dataclasses.fields(dc_type)]
+        fields = [(f.name, f.metadata.get("alias", f.name)) for f in dataclasses.fields(dc_type)]
 
     ws.append([f[1] for f in fields])
 
     for dc in dc_list:
-        ws.append([getattr(dc, f[0], '#N/A#') for f in fields])
+        ws.append([getattr(dc, f[0], "#N/A#") for f in fields])
 
     virtual_workbook = BytesIO()
     wb.save(virtual_workbook)
@@ -55,7 +50,7 @@ def get_field_names(dc_type: type) -> list[str]:
 
     :return: A list of field names.
     """
-    return [f.metadata.get('alias', f.name) for f in dataclasses.fields(dc_type)]
+    return [f.metadata.get("alias", f.name) for f in dataclasses.fields(dc_type)]
 
 
 def parse_sheet_header_row(header_row: Iterable[Cell | str], dc_type: type) -> dict[int, str]:
@@ -68,12 +63,12 @@ def parse_sheet_header_row(header_row: Iterable[Cell | str], dc_type: type) -> d
 
     :return: A dictionary of header row index and field names.
     """
-    fields_mapping = {f.metadata.get('alias', f.name): f.name for f in dataclasses.fields(dc_type)}
+    fields_mapping = {f.metadata.get("alias", f.name): f.name for f in dataclasses.fields(dc_type)}
     result = {}
     for i, header in enumerate(header_row):
         if isinstance(header, Cell):
             header = header.value
-        header = str(header or '').strip()
+        header = str(header or "").strip()
         if header in fields_mapping:
             result[i] = fields_mapping[header]
     return result

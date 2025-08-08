@@ -18,11 +18,7 @@ class AggregateRoot(metaclass=abc.ABCMeta):
         self.domain_events = []
         self.is_archive = False
 
-    def save_events_tracing(
-        self,
-        parent_event: DomainEvent | None = None,
-        trace_id: str | None = None
-    ):
+    def save_events_tracing(self, parent_event: DomainEvent | None = None, trace_id: str | None = None):
         if parent_event:
             for event in self.domain_events:
                 event.tracer.parent_span_id = parent_event.tracer.span_id

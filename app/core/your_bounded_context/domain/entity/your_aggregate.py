@@ -4,8 +4,8 @@ from app.core.ddd_base import AggregateRoot, User
 from app.core.your_bounded_context.domain.event import (
     YourAggregateCreated,
     YourAggregateDeleted,
-    YourAggregateVoided,
     YourAggregateUpdated,
+    YourAggregateVoided,
 )
 from app.core.your_bounded_context.domain.exception import (
     YourAggregateStatusNotMatched,
@@ -28,7 +28,7 @@ class YourAggregate(AggregateRoot):
         operation_histories: list[OperationHistory],
         creator: User,
         created_at: DateTime | None,
-        updated_at: DateTime | None
+        updated_at: DateTime | None,
     ):
         super().__init__()
 
@@ -70,11 +70,8 @@ class YourAggregate(AggregateRoot):
 
     @classmethod
     def create_your_aggregate(
-        cls,
-        your_aggregate_id: str,
-        your_value_object: YourValueObject,
-        creator: User
-    ) -> 'YourAggregate':
+        cls, your_aggregate_id: str, your_value_object: YourValueObject, creator: User
+    ) -> "YourAggregate":
         your_aggregate = cls(
             your_aggregate_id=your_aggregate_id,
             your_value_object=your_value_object,
@@ -82,14 +79,10 @@ class YourAggregate(AggregateRoot):
             operation_histories=[],
             creator=creator,
             created_at=None,
-            updated_at=None
+            updated_at=None,
         )
         your_aggregate.add_operation_history(OperationHistoryType.CREATED, [], creator)
-        your_aggregate.add_event(YourAggregateCreated(
-            your_aggregate_id,
-            your_value_object,
-            creator
-        ))
+        your_aggregate.add_event(YourAggregateCreated(your_aggregate_id, your_value_object, creator))
         return your_aggregate
 
     def mark_as_delete(self):
@@ -99,16 +92,16 @@ class YourAggregate(AggregateRoot):
         self,
         operation_history_type: OperationHistoryType,
         operation_history_data: list[OperationHistoryData],
-        doer: User
+        doer: User,
     ):
         if self.status == YourAggregateStatus.VOIDED:
-            raise YourAggregateStatusNotMatched(f'Your Aggregate {self.id} is in Voided status')
+            raise YourAggregateStatusNotMatched(f"Your Aggregate {self.id} is in Voided status")
         self._operation_histories.append(
             OperationHistory.create_strictly(
                 type=operation_history_type,
                 data=[d for d in operation_history_data if d.before != d.after],
                 doer=doer,
-                created_at=DateTime.now()
+                created_at=DateTime.now(),
             )
         )
 
@@ -119,33 +112,27 @@ class YourAggregate(AggregateRoot):
     def void_your_aggregate(self, doer: User):
         self.add_operation_history(
             OperationHistoryType.VOIDED,
-            [
-                OperationHistoryData('status', self._status.value, YourAggregateStatus.VOIDED.value)
-            ],
-            doer
+            [OperationHistoryData("status", self._status.value, YourAggregateStatus.VOIDED.value)],
+            doer,
         )
 
         self._status = YourAggregateStatus.VOIDED
 
         self.add_event(YourAggregateVoided(self.id, doer))
 
-    def update_your_aggregate(
-        self,
-        your_value_object: YourValueObject,
-        doer: User
-    ):
+    def update_your_aggregate(self, your_value_object: YourValueObject, doer: User):
         self.add_operation_history(
             OperationHistoryType.UPDATED,
             [
-                OperationHistoryData('your_value_object', self._your_value_object.serialize(), your_value_object.serialize())
+                OperationHistoryData(
+                    "your_value_object",
+                    self._your_value_object.serialize(),
+                    your_value_object.serialize(),
+                )
             ],
-            doer
+            doer,
         )
 
         self._your_value_object = your_value_object
 
-        self.add_event(YourAggregateUpdated(
-            self.id,
-            your_value_object,
-            doer
-        ))
+        self.add_event(YourAggregateUpdated(self.id, your_value_object, doer))

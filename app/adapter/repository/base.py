@@ -48,7 +48,7 @@ class SessionProvider:
                 raise e
 
 
-_session_provider = ContextVar('session_provider')
+_session_provider = ContextVar("session_provider")
 session_provider: SessionProvider = LocalProxy(_session_provider)  # type: ignore[assignment]
 
 
@@ -94,24 +94,20 @@ class RepositoryBase:
         raise NotImplementedError()
 
     @classmethod
-    def create_search_key_regexp(
-        cls,
-        search_key_field: str,
-        search_keys: list[str]
-    ) -> tuple[str, str]:
-        search_key_regexp = '|'.join(re.escape(str(k)) for k in search_keys)
-        search_key_field_pattern = re.compile(r'^((?P<operator>starts|ends|equals):)?(?P<search_key_field>\w+)$')
+    def create_search_key_regexp(cls, search_key_field: str, search_keys: list[str]) -> tuple[str, str]:
+        search_key_regexp = "|".join(re.escape(str(k)) for k in search_keys)
+        search_key_field_pattern = re.compile(r"^((?P<operator>starts|ends|equals):)?(?P<search_key_field>\w+)$")
         m = search_key_field_pattern.match(search_key_field)
         if m:
-            op = m.group('operator')
-            field = m.group('search_key_field')
+            op = m.group("operator")
+            field = m.group("search_key_field")
             match op:
-                case 'starts':
-                    return field, f'^{search_key_regexp}'
-                case 'ends':
-                    return field, f'{search_key_regexp}$'
-                case 'equals':
-                    return field, f'^{search_key_regexp}$'
+                case "starts":
+                    return field, f"^{search_key_regexp}"
+                case "ends":
+                    return field, f"{search_key_regexp}$"
+                case "equals":
+                    return field, f"^{search_key_regexp}$"
                 case _:
                     return field, search_key_regexp
         return search_key_field, search_key_regexp
@@ -120,14 +116,14 @@ class RepositoryBase:
     def create_sort_by_exp(cls, sort_by: list[str]) -> list[UnaryExpression]:
         sort_by_exp = []
         used_fields = set()
-        pattern = re.compile(r'^([\-\+]?)(\w+)$')
+        pattern = re.compile(r"^([\-\+]?)(\w+)$")
         for sort in sort_by:
             m = pattern.match(sort)
             if m:
                 order, field = m.groups()
                 if field in cls.sort_by_fields() and field not in used_fields:
                     used_fields.add(field)
-                    if order == '-':
+                    if order == "-":
                         sort_by_exp.append(sa.desc(cls.sort_by_fields()[field]))
                     else:
                         sort_by_exp.append(sa.asc(cls.sort_by_fields()[field]))
@@ -150,7 +146,7 @@ class RepositoryBase:
             model = None
 
         if not model:
-            raise NoResultFound(f'{self.entity_name()} {pkey} not found')
+            raise NoResultFound(f"{self.entity_name()} {pkey} not found")
 
         return self.model_to_entity(model)
 
@@ -163,7 +159,7 @@ class RepositoryBase:
         offset: int,
         limit: int,
         options: list[ExecutableOption] | None = None,
-        return_entity: bool = True
+        return_entity: bool = True,
     ) -> tuple[int, list]:
         q_filters = list(filters)
         if search_keys:
@@ -176,13 +172,13 @@ class RepositoryBase:
                         search_key_filters.append(
                             s.column.path_match(
                                 sa.cast(
-                                    f'{s.json_path} like_regex {json.dumps(search_key_regexp)}',
-                                    JSONPATH
+                                    f"{s.json_path} like_regex {json.dumps(search_key_regexp)}",
+                                    JSONPATH,
                                 )
                             )
                         )
                     else:
-                        c = sa.cast(s.column, sa.TEXT) if f == 'id' else s.column
+                        c = sa.cast(s.column, sa.TEXT) if f == "id" else s.column
                         search_key_filters.append(c.regexp_match(search_key_regexp))
             if search_key_filters:
                 q_filters.append(sa.or_(*search_key_filters))
@@ -192,7 +188,7 @@ class RepositoryBase:
 
         sort_by_exp = self.create_sort_by_exp(sort_by)
         if not sort_by_exp:
-            sort_by_exp = self.create_sort_by_exp(['-created'])
+            sort_by_exp = self.create_sort_by_exp(["-created"])
         q_stmt = q_stmt.order_by(*sort_by_exp)
 
         q_stmt = q_stmt.offset(offset)

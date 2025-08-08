@@ -9,9 +9,13 @@ from app.config import config
 
 
 class DomainEventModel(Base):
-    __tablename__ = 'domain_event'
+    __tablename__ = "domain_event"
     __table_args__ = (
-        Index(f'ix_{config.postgres_schema}_{__tablename__}_body', 'body', postgresql_using='gin'),
+        Index(
+            f"ix_{config.postgres_schema}_{__tablename__}_body",
+            "body",
+            postgresql_using="gin",
+        ),
     )
 
     id: Mapped[int] = mapped_column(BigInteger, autoincrement=True, primary_key=True)

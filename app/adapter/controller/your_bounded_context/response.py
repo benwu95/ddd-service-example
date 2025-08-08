@@ -40,7 +40,7 @@ class YourAggregateResponse(DataclassMixin):
     updated_at: DateTime | None
 
     @classmethod
-    def create_from_object(cls, obj: YourAggregate) -> 'YourAggregateResponse':
+    def create_from_object(cls, obj: YourAggregate) -> "YourAggregateResponse":
         resp = super().create_from_object(obj)
 
         for h_idx, h in enumerate(obj.operation_histories):
@@ -66,8 +66,8 @@ class SearchYourAggregatesResponse(DataclassMixin):
     results: list[YourAggregateResponse]
 
     @classmethod
-    def create_from_object(cls, obj: SearchResult) -> 'SearchYourAggregatesResponse':
+    def create_from_object(cls, obj: SearchResult) -> "SearchYourAggregatesResponse":
         return cls(
             total=obj.total,
-            results=[YourAggregateResponse.create_from_object(i) for i in obj.results]
+            results=[YourAggregateResponse.create_from_object(i) for i in obj.results],
         )

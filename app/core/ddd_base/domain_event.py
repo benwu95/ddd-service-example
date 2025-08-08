@@ -62,13 +62,13 @@ class DomainEvent:
         dict_with_enum = dataclasses.asdict(self)
         dict_of_event = self._convert_enum_dict(dict_with_enum)
         return {
-            'name': type(self).__name__,
-            'body': dict_of_event,
-            'created_at': self.tracer.created_at,
-            'version': self.VERSION,
-            'span_id': self.tracer.span_id,
-            'parent_span_id': self.tracer.parent_span_id,
-            'trace_id': self.tracer.trace_id
+            "name": type(self).__name__,
+            "body": dict_of_event,
+            "created_at": self.tracer.created_at,
+            "version": self.VERSION,
+            "span_id": self.tracer.span_id,
+            "parent_span_id": self.tracer.parent_span_id,
+            "trace_id": self.tracer.trace_id,
         }
 
     def _convert_enum_dict(self, target: dict) -> dict:

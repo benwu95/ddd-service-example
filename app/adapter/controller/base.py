@@ -5,14 +5,14 @@ from typing import Iterable, Self
 
 from dataclass_mixins import DataclassMixin, camel_to_snake_case
 from pendulum.datetime import DateTime
-from sqlalchemy.exc import NoResultFound, IntegrityError, SQLAlchemyError
+from sqlalchemy.exc import IntegrityError, NoResultFound, SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.adapter.repository.base import session_provider
-from app.core.ddd_base import User, UseCaseBase
+from app.core.ddd_base import UseCaseBase, User
 from app.logger import ServiceLogger
-from app.trace import TokenInfo
 from app.package_instance import message_queue_publisher
+from app.trace import TokenInfo
 
 
 def create_user(token_info: TokenInfo) -> User:
@@ -21,7 +21,7 @@ def create_user(token_info: TokenInfo) -> User:
         organization_id=token_info.organization.id,
         name=token_info.user.name,
         email=token_info.user.email,
-        mobile=token_info.user.mobile
+        mobile=token_info.user.mobile,
     )
 
 
@@ -76,7 +76,7 @@ class UserResponse(DataclassMixin):
     mobile: str | None
 
     @classmethod
-    def create_from_object(cls, obj: User) -> 'UserResponse':
+    def create_from_object(cls, obj: User) -> "UserResponse":
         resp = super().create_from_object(obj)
 
         # TODO: fix organization info
@@ -108,8 +108,8 @@ class ControllerBase:
 
     @staticmethod
     def connect_db_session(
-        exception_message: str = '',
-        warning_exceptions: Iterable[type[Exception]] = tuple()
+        exception_message: str = "",
+        warning_exceptions: Iterable[type[Exception]] = tuple(),
     ):
         def inner(func):
             @wraps(func)
@@ -130,7 +130,7 @@ class ControllerBase:
                         await self.session.rollback()
                         self.logger.error(exception_message if exception_message else str(e))
                         self.message_queue_publisher.clean_messages()
-                        raise SQLAlchemyError('\n'.join(e.args)) from e
+                        raise SQLAlchemyError("\n".join(e.args)) from e
                     except tuple(warning_exceptions) as e:
                         await self.session.rollback()
                         self.logger.warning(exception_message if exception_message else str(e))
@@ -145,5 +145,7 @@ class ControllerBase:
                 if self.message_queue_publisher.messages:
                     self.message_queue_publisher.publish_messages()
                 return result
+
             return wrapper
+
         return inner
