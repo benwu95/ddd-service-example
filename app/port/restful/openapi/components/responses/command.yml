@@ -14,7 +14,7 @@ components:
           type: object
           properties:
             success:
-              description: 成功訊息
+              description: payload and message
               type: array
               items:
                 type: object
@@ -25,11 +25,11 @@ components:
                       - $ref: '#/components/schemas/PayloadObject'
                       - $ref: '#/components/schemas/PayloadList'
                   detail:
-                    description: 詳細訊息
+                    description: message
                     type: string
                     nullable: true
             failure:
-              description: 錯誤訊息
+              description: payload and message
               type: array
               items:
                 type: object
@@ -40,7 +40,7 @@ components:
                       - $ref: '#/components/schemas/PayloadObject'
                       - $ref: '#/components/schemas/PayloadList'
                   detail:
-                    description: 詳細訊息
+                    description: error message
                     type: string
                     nullable: true
 

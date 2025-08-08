@@ -1,13 +1,13 @@
 components:
   schemas:
     Status:
-      description: 狀態
+      description: status
       type: string
       enum:
         - created
         - voided
     OperationHistoryType:
-      description: 操作類型
+      description: operation history type
       type: string
       enum:
         - created

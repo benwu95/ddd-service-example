@@ -8,4 +8,4 @@ properties:
     description: trace ID
     type: string
   data:
-    description: 詳細結果
+    description: data

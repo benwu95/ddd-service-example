@@ -1,7 +1,7 @@
 get:
   operationId: app.port.restful.handler.your_bounded_context.your_aggregate_handler.search_your_aggregates
-  summary: 取得列表
-  description: 取得列表
+  summary: search list
+  description: search list
   tags:
     - Your Aggregate
   parameters:
@@ -26,7 +26,7 @@ get:
       explode: true
     - name: dateField
       in: query
-      description: 搜尋日期欄位
+      description: Search date field
       schema:
         type: array
         items:
@@ -37,7 +37,7 @@ get:
       explode: true
     - name: startTime
       in: query
-      description: 搜尋日期區間的開始
+      description: Start time of date range
       schema:
         type: number
         nullable: true
@@ -45,7 +45,7 @@ get:
       explode: true
     - name: endTime
       in: query
-      description: 搜尋日期區間的結尾
+      description: End time of date range
       schema:
         type: number
         nullable: true
@@ -54,11 +54,11 @@ get:
     - name: searchKeyField
       in: query
       description: |
-        searchKey 需要查詢的欄位:
-          - `{field}` 為部分符合
-          - `starts:{field}` 為開頭符合
-          - `ends:{field}` 為結尾符合
-          - `equals:{field}` 為完全符合
+        Fields to search for searchKey:
+          - `{field}` for partial match
+          - `starts:{field}` for prefix match
+          - `ends:{field}` for suffix match
+          - `equals:{field}` for exact match
 
         Available fields:
           - yourValueObjectA
@@ -80,10 +80,10 @@ get:
     - name: sortBy
       in: query
       description: |
-        可以排序的欄位:
-          - `-{field}` 表示降序排列
-          - `+{field}` 表示升序排列
-          - `{field}` 表示升序排列
+        Sortable fields:
+          - `-{field}` for descending order
+          - `+{field}` for ascending order
+          - `{field}` for ascending order
 
         Available fields:
           - createdAt

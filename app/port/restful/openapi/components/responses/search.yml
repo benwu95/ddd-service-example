@@ -8,12 +8,12 @@ properties:
     description: trace ID
     type: string
   data:
-    description: 搜尋結果
+    description: search results
     type: object
     properties:
       total:
-        description: 總筆數
+        description: total number of search results is not limited by limit
         type: integer
       results:
-        description: 結果
+        description: search results
         type: array

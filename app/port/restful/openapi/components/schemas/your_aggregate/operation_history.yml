@@ -3,23 +3,23 @@ properties:
   type:
     $ref: enum.yml#/components/schemas/OperationHistoryType
   data:
-    description: 資料
+    description: data
     type: array
     items:
       type: object
       properties:
         field:
-          description: 欄位名稱
+          description: field name
           type: string
         before:
-          description: 舊值
+          description: old value
           nullable: true
         after:
-          description: 新值
+          description: new value
           nullable: true
   doer:
-    description: 執行人
+    description: doer
     $ref: ../auth.yml#/components/schemas/User
   createdAt:
-    description: 建立時間 utc timestamp
+    description: created time (utc timestamp)
     type: number

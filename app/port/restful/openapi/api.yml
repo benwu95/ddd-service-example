@@ -29,7 +29,7 @@ tags:
 
 components:
   schemas:
-    Your Aggregate:
+    YourAggregate:
       $ref: components/schemas/your_aggregate/id.yml#/components/schemas/Detail
   securitySchemes:
     jwt:

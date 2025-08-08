@@ -36,17 +36,17 @@ components:
             type: object
             properties:
               yourValueObject:
-                description: 建立參數
+                description: your value object
                 type: object
                 required:
                   - propertyA
                   - propertyB
                 properties:
                   propertyA:
-                    description: 參數A
+                    description: property A
                     type: string
                   propertyB:
-                    description: 參數B
+                    description: property B
                     type: integer
 
     Update:
@@ -65,17 +65,17 @@ components:
                 description: ID
                 type: string
               yourValueObject:
-                description: value object 參數
+                description: your value object
                 type: object
                 required:
                   - propertyA
                   - propertyB
                 properties:
                   propertyA:
-                    description: 參數A
+                    description: property A
                     type: string
                   propertyB:
-                    description: 參數B
+                    description: property B
                     type: integer
 
     Delete:

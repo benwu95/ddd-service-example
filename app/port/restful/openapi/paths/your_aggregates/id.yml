@@ -1,7 +1,7 @@
 get:
   operationId: app.port.restful.handler.your_bounded_context.your_aggregate_handler.get_your_aggregate
-  summary: 取得資料
-  description: 取得資料
+  summary: get detail
+  description: get detail
   tags:
     - Your Aggregate
   parameters:
@@ -14,7 +14,7 @@ get:
       style: simple
   responses:
     '200':
-      description: 詳細資料
+      description: ''
       content:
         application/json:
           schema:

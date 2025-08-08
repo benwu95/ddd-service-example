@@ -12,4 +12,4 @@ content:
           description: trace ID
           type: string
         data:
-          description: 詳細結果
+          description: error message

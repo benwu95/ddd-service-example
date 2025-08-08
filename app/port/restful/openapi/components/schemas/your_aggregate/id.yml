@@ -14,26 +14,26 @@ components:
             - propertyB
           properties:
             propertyA:
-              description: 參數A
+              description: property A
               type: string
             propertyB:
-              description: 參數B
+              description: property B
               type: integer
         status:
-          description: 狀態
+          description: status
           $ref: enum.yml#/components/schemas/Status
         operationHistories:
-          description: 操作紀錄
+          description: operation histories
           type: array
           items:
             $ref: operation_history.yml
         creator:
-          description: 建立人
+          description: creator
           $ref: ../auth.yml#/components/schemas/User
         createdAt:
-          description: 建立時間 utc timestamp
+          description: created time (utc timestamp)
           type: number
         updatedAt:
-          description: 更新時間 utc timestamp
+          description: updated time (utc timestamp)
           type: number
           nullable: true
