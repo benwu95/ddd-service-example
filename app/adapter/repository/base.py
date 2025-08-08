@@ -175,7 +175,10 @@ class RepositoryBase:
                     if isinstance(s.column.type, JSONB):
                         search_key_filters.append(
                             s.column.path_match(
-                                sa.cast(f'{s.json_path} like_regex {json.dumps(search_key_regexp)}',JSONPATH)
+                                sa.cast(
+                                    f'{s.json_path} like_regex {json.dumps(search_key_regexp)}',
+                                    JSONPATH
+                                )
                             )
                         )
                     else:
