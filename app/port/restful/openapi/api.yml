@@ -11,16 +11,16 @@ paths:
   /health:
     $ref: paths/health.yml
 
-  /yourAggregates:
+  /your-aggregates:
     $ref: paths/your_aggregates/your_aggregates.yml
 
-  /yourAggregates/command:
+  /your-aggregates/command:
     $ref: paths/your_aggregates/command.yml
 
-  /yourAggregates/export:
+  /your-aggregates/export:
     $ref: paths/your_aggregates/export.yml
 
-  /yourAggregates/{your_aggregate_id}:
+  /your-aggregates/{your_aggregate_id}:
     $ref: paths/your_aggregates/id.yml
 
 tags:
@@ -29,7 +29,7 @@ tags:
 
 components:
   schemas:
-    YourAggregate:
+    Your Aggregate:
       $ref: components/schemas/your_aggregate/id.yml#/components/schemas/Detail
   securitySchemes:
     jwt:
