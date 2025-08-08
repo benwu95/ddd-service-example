@@ -1,7 +1,4 @@
 {
-    "pylint.args": [
-        "--disable=C0111,C0103,E1121,C0301"
-    ],
     "[python]": {
         "editor.defaultFormatter": "ms-python.black-formatter",
         "editor.formatOnSave": true,
@@ -9,7 +6,10 @@
             "source.organizeImports": "explicit"
         },
     },
-    "isort.args":[
+    "pylint.args": [
+        "--disable=C0111,C0103,E1121,C0301"
+    ],
+    "isort.args": [
         "--profile",
         "black",
         "--check"
