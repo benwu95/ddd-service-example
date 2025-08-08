@@ -239,7 +239,4 @@ class RepositoryBase:
         for event in aggregate.all_events:
             self.session.add(DomainEventModel(**event.serialize()))
 
-        # NOTE(Ben Wu)
-        # session.add 處理既有的 model 時會直接更新資料在 session 中
-        # 新增的 model 則會需要 session.flush()
         await self.session.flush()

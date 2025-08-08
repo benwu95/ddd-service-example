@@ -13,7 +13,5 @@ def decode_token(token: str) -> TokenInfo:
             detail='Provided token is not valid',
             ext={'code': 'Provided token is not valid'}
         )
-    # NOTE(Ben Wu)
-    # connexion v3 的 security 是在 middleware 執行，此時尚未進入 app context
     set_token_info(token_info)
     return token_info

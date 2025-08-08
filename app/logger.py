@@ -39,7 +39,6 @@ def setup_logger(logger: logging.Logger):
 
 
 def setup_logging():
-    # NOTE(Ben Wu)
     # if logger does not have handler, and `propagate` is True (default value),
     # the message will propagate up to the root logger
     root_logger = logging.getLogger()

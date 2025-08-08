@@ -34,8 +34,9 @@ async def get_your_aggregate(your_aggregate_id: str, token_info: TokenInfo):
 
 
 # https://connexion.readthedocs.io/en/latest/request.html#pythonic-parameters
-# 前端用的搜尋參數基本上都是單數，如果遇到 python 保留字，ex. id, type, filter
-# 配合 connexion，命名方法為在後面補上 `_`，ex. id_
+# The search parameters used by the frontend are generally singular.
+# If they conflict with Python reserved words (e.g., id, type, filter),
+# to work with Connexion, name them by appending an underscore `_` at the end (e.g., id_).
 async def search_your_aggregates(
     token_info: TokenInfo,
     id_: list[str] | None = None,

@@ -26,7 +26,8 @@ class YourAggregateRepositoryInterface(metaclass=abc.ABCMeta):
     async def save_your_aggregate(self, your_aggregate: YourAggregate):
         raise NotImplementedError
 
-    # 搜尋參數如果是 string，盡量使用 `list[str] | None`，然後名稱記得用複數或集合名詞
+    # For string parameters, prefer using `list[str] | None`,
+    # and use plural or collective nouns for naming
     @abc.abstractmethod
     async def search_your_aggregates(
         self,

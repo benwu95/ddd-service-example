@@ -128,13 +128,13 @@ class LoggingMiddleware:
 def serve():
     setup_logging()
 
-    # 原因
-    # 1. swagger ui 的 api 測試網址是使用 base_path
-    # 2. 線上 istio 的設定， domain.com/xxx-service/... -> xxx-service/...
+    # Reason:
+    # 1. The API test URL in Swagger UI uses base_path.
+    # 2. In the online Istio configuration, domain.com/xxx-service/... -> xxx-service/...
     #
-    # 為了讓線上的 swagger ui 可以正常測試
-    # 1. 多提供一份 api，路徑(gateway_base_path)為 `config.gateway_prefix + base_path`
-    # 2. 將 swagger ui 的 json url 改為 `config.gateway_prefix + gateway_base_path + '/openapi.json'`
+    # To allow the online Swagger UI to work properly:
+    # 1. Provide an additional API whose path (gateway_base_path) is `config.gateway_prefix + base_path`.
+    # 2. Change the Swagger UI's JSON URL to `config.gateway_prefix + gateway_base_path + '/openapi.json'`.
 
     base_path = '/api'
     gateway_base_path = config.gateway_prefix + base_path
