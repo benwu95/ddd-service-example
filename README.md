@@ -13,7 +13,7 @@ Based on Domain-Driven Design and Event-Driven architecture, and using the follo
 ```sh
 pyenv virtualenv new-service
 pyenv activate new-service
-pip install pip wheel -U
+pip install pip wheel setuptools -U
 pip install -r requirements_local.txt
 ```
 ### Init
