@@ -82,7 +82,9 @@ class YourAggregate(AggregateRoot):
             updated_at=None,
         )
         your_aggregate.add_operation_history(OperationHistoryType.CREATED, [], creator)
-        your_aggregate.add_event(YourAggregateCreated(your_aggregate_id, your_value_object, creator))
+        your_aggregate.add_event(
+            YourAggregateCreated(your_aggregate_id, your_value_object, creator)
+        )
         return your_aggregate
 
     def mark_as_delete(self):

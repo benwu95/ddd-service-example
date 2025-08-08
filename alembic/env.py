@@ -4,6 +4,7 @@ from logging.config import fileConfig
 from sqlalchemy import Connection, engine_from_config, pool, text
 
 from alembic import context
+
 from app.config import config as app_config
 
 # this is the Alembic Config object, which provides

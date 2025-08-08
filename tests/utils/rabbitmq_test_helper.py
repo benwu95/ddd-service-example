@@ -17,11 +17,15 @@ class TemporaryQueueWatcher:
         self.connection = pika.BlockingConnection(parameters)
         self.channel = self.connection.channel()
 
-        self.channel.exchange_declare(exchange=self.exchange, exchange_type=ExchangeType.topic, durable=False)
+        self.channel.exchange_declare(
+            exchange=self.exchange, exchange_type=ExchangeType.topic, durable=False
+        )
         result = self.channel.queue_declare(queue="", exclusive=True)
         self.queue_name = result.method.queue
 
-        self.channel.queue_bind(exchange=self.exchange, queue=self.queue_name, routing_key=routing_key)
+        self.channel.queue_bind(
+            exchange=self.exchange, queue=self.queue_name, routing_key=routing_key
+        )
 
     def assert_message_published(self, expected_message: QueueMessage, timeout: float = 3):
         expected = expected_message.to_payload()

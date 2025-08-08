@@ -10,7 +10,9 @@ type AsyncEventHandler = Callable[[DomainEvent], Coroutine[Any, Any, Any]]
 
 class EventBus:
     def __init__(self) -> None:
-        self._subscribed_for_events: dict[type[DomainEvent], set[AsyncEventHandler]] = defaultdict(set)
+        self._subscribed_for_events: dict[type[DomainEvent], set[AsyncEventHandler]] = defaultdict(
+            set
+        )
         self._subscribed_for_all: set[AsyncEventHandler] = set()
 
     def subscribe(self, event_types: list[type[DomainEvent]] = None, all_event=False):

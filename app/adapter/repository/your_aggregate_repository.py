@@ -37,7 +37,11 @@ class YourAggregateRepository(RepositoryBase, YourAggregateRepositoryInterface):
 
     @staticmethod
     def search_key_fields() -> dict[str, SearchKeyField]:
-        return {"your_value_object_a": SearchKeyField(YourAggregateModel.your_value_object, json_path="$.property_a")}
+        return {
+            "your_value_object_a": SearchKeyField(
+                YourAggregateModel.your_value_object, json_path="$.property_a"
+            )
+        }
 
     @staticmethod
     def sort_by_fields() -> dict[str, InstrumentedAttribute]:
@@ -135,7 +139,9 @@ class YourAggregateRepository(RepositoryBase, YourAggregateRepositoryInterface):
         limit: int = 0,
     ) -> SearchResult:
         filters = self._get_search_filters(ids, statuses, date_fields, start_time, end_time)
-        total, items = await self._search(filters, search_key_fields or [], search_keys, sort_by or [], offset, limit)
+        total, items = await self._search(
+            filters, search_key_fields or [], search_keys, sort_by or [], offset, limit
+        )
         return SearchResult(total, items)
 
     async def search_your_aggregate_models(

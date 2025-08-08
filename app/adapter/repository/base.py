@@ -94,9 +94,13 @@ class RepositoryBase:
         raise NotImplementedError()
 
     @classmethod
-    def create_search_key_regexp(cls, search_key_field: str, search_keys: list[str]) -> tuple[str, str]:
+    def create_search_key_regexp(
+        cls, search_key_field: str, search_keys: list[str]
+    ) -> tuple[str, str]:
         search_key_regexp = "|".join(re.escape(str(k)) for k in search_keys)
-        search_key_field_pattern = re.compile(r"^((?P<operator>starts|ends|equals):)?(?P<search_key_field>\w+)$")
+        search_key_field_pattern = re.compile(
+            r"^((?P<operator>starts|ends|equals):)?(?P<search_key_field>\w+)$"
+        )
         m = search_key_field_pattern.match(search_key_field)
         if m:
             op = m.group("operator")

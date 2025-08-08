@@ -48,7 +48,9 @@ class RabbitMqPublisher(MessageQueuePublisherInterface):
             if routing_key not in self.messages:
                 self.messages[routing_key] = {}
             function_name = (
-                message.function_name if isinstance(message.function_name, str) else message.function_name.value
+                message.function_name
+                if isinstance(message.function_name, str)
+                else message.function_name.value
             )
             m_key = f"{message.trace_id}_{function_name}"
             if m_key not in self.messages[routing_key]:
@@ -168,13 +170,19 @@ class RabbitMqConsumer(MessageQueueConsumerInterface):
                 message.started = pendulum.now().add(seconds=message.retry_delay_second)
 
                 if message.attempt_number == -1:
-                    self.logger.warning("Consume failed: %s", e, extra={"traceId": message.trace_id})
+                    self.logger.warning(
+                        "Consume failed: %s", e, extra={"traceId": message.trace_id}
+                    )
                     self.logger.info("Retry message", extra={"traceId": message.trace_id})
-                    self.publisher.publish_raw_message(self.routing_key, message.to_payload(), message_logging=False)
+                    self.publisher.publish_raw_message(
+                        self.routing_key, message.to_payload(), message_logging=False
+                    )
                 else:
                     message.attempt_number -= 1
                     if message.attempt_number > 0:
-                        self.logger.warning("Consume failed: %s", e, extra={"traceId": message.trace_id})
+                        self.logger.warning(
+                            "Consume failed: %s", e, extra={"traceId": message.trace_id}
+                        )
                         self.logger.info(
                             "Retry message, remaining %s times",
                             message.attempt_number,
@@ -186,7 +194,9 @@ class RabbitMqConsumer(MessageQueueConsumerInterface):
                             message_logging=False,
                         )
                     else:
-                        self.logger.exception("Consume failed: %s", e, extra={"traceId": message.trace_id})
+                        self.logger.exception(
+                            "Consume failed: %s", e, extra={"traceId": message.trace_id}
+                        )
 
             ch.basic_ack(delivery_tag=method.delivery_tag)
 
@@ -201,7 +211,9 @@ class RabbitMqConsumer(MessageQueueConsumerInterface):
                 try:
                     if not self.connection.channel:
                         raise RuntimeError("Consume channel not found")
-                    self.connection.channel.basic_consume(self.connection.queue_name, rabbitmq_handler, auto_ack=False)
+                    self.connection.channel.basic_consume(
+                        self.connection.queue_name, rabbitmq_handler, auto_ack=False
+                    )
                     self.connection.channel.start_consuming()
                 except pika.exceptions.ConnectionClosedByBroker:
                     self.logger.error("Connection was closed by broker, retrying...")

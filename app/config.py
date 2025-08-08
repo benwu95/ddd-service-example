@@ -22,7 +22,9 @@ class Config:
     database_username = os.environ.get("DATABASE_USERNAME", "postgres")
     database_password = os.environ.get("DATABASE_PASSWORD", "password")
     database_url = os.environ.get("DATABASE_URL", "127.0.0.1:5432/default")
-    sqlalchemy_database_url = f"postgresql+psycopg://{database_username}:{quote_plus(database_password)}@{database_url}"
+    sqlalchemy_database_url = (
+        f"postgresql+psycopg://{database_username}:{quote_plus(database_password)}@{database_url}"
+    )
     postgres_schema = os.environ.get("POSTGRES_SCHEMA", "ddd_service")
 
     # Server

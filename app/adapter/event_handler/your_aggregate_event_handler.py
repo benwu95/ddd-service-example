@@ -35,9 +35,7 @@ class YourAggregateEventHandler:
     @staticmethod
     @event_bus.subscribe(event_types=[your_aggregate_event.YourAggregateCreated])
     @helper.connect_db_session()
-    async def handle_your_aggregate_created(
-        event: your_aggregate_event.YourAggregateCreated,
-    ):
+    async def handle_your_aggregate_created(event: your_aggregate_event.YourAggregateCreated):
         # do something with use case or package
         if event.your_value_object is not None:
             # 測試 session 新增 model 的行為
@@ -50,10 +48,10 @@ class YourAggregateEventHandler:
     @staticmethod
     @event_bus.subscribe(event_types=[your_aggregate_event.YourAggregateVoided])
     @helper.connect_db_session()
-    async def handle_your_aggregate_voided(
-        event: your_aggregate_event.YourAggregateVoided,
-    ):
-        your_aggregate = await helper.repository.load_your_aggregate(event.your_aggregate_id, lock=False)
+    async def handle_your_aggregate_voided(event: your_aggregate_event.YourAggregateVoided):
+        your_aggregate = await helper.repository.load_your_aggregate(
+            event.your_aggregate_id, lock=False
+        )
         if your_aggregate.status == YourAggregateStatus.VOIDED:
             payload = YourAggregateVoided(event.your_aggregate_id)
             message_queue_publisher.push_message(

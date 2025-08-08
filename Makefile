@@ -104,8 +104,8 @@ local-test:
 	pytest tests --cov -s --cov-report=term-missing
 
 isort-and-black:
-	isort .
-	black .
+	isort app/ tests/ packages/
+	black app/ tests/ packages/
 
 migrate-database:
 	alembic upgrade head

@@ -6,7 +6,9 @@ from openpyxl import Workbook
 from openpyxl.cell import Cell
 
 
-def create_xlsx(title: str, dc_type: type, dc_list: list, output_fields: list[str] | None = None) -> BytesIO:
+def create_xlsx(
+    title: str, dc_type: type, dc_list: list, output_fields: list[str] | None = None
+) -> BytesIO:
     """
     Creates an excel file from a list of dataclasses.
 
@@ -25,7 +27,9 @@ def create_xlsx(title: str, dc_type: type, dc_list: list, output_fields: list[st
     ws.title = title
 
     if output_fields is not None:
-        fields_mapping = {f.name: f.metadata.get("alias", f.name) for f in dataclasses.fields(dc_type)}
+        fields_mapping = {
+            f.name: f.metadata.get("alias", f.name) for f in dataclasses.fields(dc_type)
+        }
         fields = [(f, fields_mapping.get(f, f)) for f in output_fields]
     else:
         fields = [(f.name, f.metadata.get("alias", f.name)) for f in dataclasses.fields(dc_type)]

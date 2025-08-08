@@ -19,7 +19,9 @@ class YourAggregateUseCase(UseCaseBase):
         await event_bus.publish_all(your_aggregate.all_events)
 
     async def create_your_aggregate(self, your_value_object: YourValueObject, creator: User) -> str:
-        your_aggregate = YourAggregate.create_your_aggregate(YourAggregate.generate_id(), your_value_object, creator)
+        your_aggregate = YourAggregate.create_your_aggregate(
+            YourAggregate.generate_id(), your_value_object, creator
+        )
         await self._save(your_aggregate)
         return your_aggregate.id
 
@@ -33,7 +35,9 @@ class YourAggregateUseCase(UseCaseBase):
         your_aggregate.void_your_aggregate(doer)
         await self._save(your_aggregate)
 
-    async def update_your_aggregate(self, your_aggregate_id: str, your_value_object: YourValueObject, doer: User):
+    async def update_your_aggregate(
+        self, your_aggregate_id: str, your_value_object: YourValueObject, doer: User
+    ):
         your_aggregate = await self.repository.load_your_aggregate(your_aggregate_id)
         your_aggregate.update_your_aggregate(your_value_object, doer)
         await self._save(your_aggregate)

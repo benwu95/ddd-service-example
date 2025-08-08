@@ -17,7 +17,9 @@ def get_log_formatter() -> logging.Formatter:
             r'"logger": "%(name)s", '
             r'"message": %(message)s'
         )
-    return logging.Formatter(r"[%(asctime)s] %(levelname)s " r"[%(filename)s:%(lineno)d %(funcName)s] %(message)s")
+    return logging.Formatter(
+        r"[%(asctime)s] %(levelname)s " r"[%(filename)s:%(lineno)d %(funcName)s] %(message)s"
+    )
 
 
 def get_console_handler() -> logging.StreamHandler:
@@ -95,9 +97,7 @@ class GoogleCloudLoggingExceptionFormatter(logging.Formatter):
             log_str = ""
             for i in range(detail_parts):
                 part_str = detail_str[i * MAX_DETAIL_LENGTH : (i + 1) * MAX_DETAIL_LENGTH]
-                extra_info_str = (
-                    f', "part": "{i + 1}/{detail_parts}", "detail": {json.dumps(part_str, ensure_ascii=False)}'
-                )
+                extra_info_str = f', "part": "{i + 1}/{detail_parts}", "detail": {json.dumps(part_str, ensure_ascii=False)}'
                 log_str += super().format(recordcopy).replace("\n", "") + extra_info_str + "}\n"
         else:
             extra_info_str += f', "detail": {detail_str}'

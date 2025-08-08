@@ -110,7 +110,9 @@ class MessageQueueConnection:
                         routing_key=self.routing_key,
                     )
         except Exception as e:
-            raise connection_workflow.AMQPConnectorException("Failed to create connection, stopping...") from e
+            raise connection_workflow.AMQPConnectorException(
+                "Failed to create connection, stopping..."
+            ) from e
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         if self.connection and self.connection.is_open:

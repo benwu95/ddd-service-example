@@ -47,14 +47,20 @@ async def test_create_your_aggregate(test_db_session, created_your_aggregate_id)
     your_aggregate: YourAggregateModel = (
         (
             await test_db_session.execute(
-                sa.select(YourAggregateModel).where(YourAggregateModel.id == created_your_aggregate_id)
+                sa.select(YourAggregateModel).where(
+                    YourAggregateModel.id == created_your_aggregate_id
+                )
             )
         )
         .scalars()
         .one()
     )
     domain_event: DomainEventModel = (
-        (await test_db_session.execute(sa.select(DomainEventModel).order_by(DomainEventModel.created_at.desc())))
+        (
+            await test_db_session.execute(
+                sa.select(DomainEventModel).order_by(DomainEventModel.created_at.desc())
+            )
+        )
         .scalars()
         .first()
     )
@@ -62,7 +68,10 @@ async def test_create_your_aggregate(test_db_session, created_your_aggregate_id)
     assert your_aggregate.id == created_your_aggregate_id
     assert your_aggregate.status == YourAggregateStatus.CREATED.value
     # event handler 有做 update
-    assert your_aggregate.your_value_object["property_a"] == your_value_object["property_a"] + "_test_event_handler"
+    assert (
+        your_aggregate.your_value_object["property_a"]
+        == your_value_object["property_a"] + "_test_event_handler"
+    )
     assert your_aggregate.your_value_object["property_b"] == your_value_object["property_b"]
     assert your_aggregate.operation_histories[-1]["type"] == OperationHistoryType.UPDATED.value
     assert domain_event.name == "YourAggregateUpdated"
@@ -206,12 +215,20 @@ async def test_update_your_aggregate(test_db_session, created_your_aggregate_id)
     your_aggregate_id = await controller.update_your_aggregate(request)
 
     your_aggregate: YourAggregateModel = (
-        (await test_db_session.execute(sa.select(YourAggregateModel).where(YourAggregateModel.id == your_aggregate_id)))
+        (
+            await test_db_session.execute(
+                sa.select(YourAggregateModel).where(YourAggregateModel.id == your_aggregate_id)
+            )
+        )
         .scalars()
         .one()
     )
     domain_event: DomainEventModel = (
-        (await test_db_session.execute(sa.select(DomainEventModel).order_by(DomainEventModel.created_at.desc())))
+        (
+            await test_db_session.execute(
+                sa.select(DomainEventModel).order_by(DomainEventModel.created_at.desc())
+            )
+        )
         .scalars()
         .first()
     )
@@ -226,16 +243,26 @@ async def test_update_your_aggregate(test_db_session, created_your_aggregate_id)
 
 async def test_delete_your_aggregate(test_db_session, created_your_aggregate_id):
     controller = YourAggregateController()
-    request = DeleteYourAggregateRequest.create_strictly(id=created_your_aggregate_id, doer={"id": "test-user-id"})
+    request = DeleteYourAggregateRequest.create_strictly(
+        id=created_your_aggregate_id, doer={"id": "test-user-id"}
+    )
     your_aggregate_id = await controller.delete_your_aggregate(request)
 
     your_aggregate: YourAggregateModel = (
-        (await test_db_session.execute(sa.select(YourAggregateModel).where(YourAggregateModel.id == your_aggregate_id)))
+        (
+            await test_db_session.execute(
+                sa.select(YourAggregateModel).where(YourAggregateModel.id == your_aggregate_id)
+            )
+        )
         .scalars()
         .one_or_none()
     )
     domain_event: DomainEventModel = (
-        (await test_db_session.execute(sa.select(DomainEventModel).order_by(DomainEventModel.created_at.desc())))
+        (
+            await test_db_session.execute(
+                sa.select(DomainEventModel).order_by(DomainEventModel.created_at.desc())
+            )
+        )
         .scalars()
         .first()
     )
@@ -248,16 +275,26 @@ async def test_void_your_aggregate(test_db_session, test_rabbitmq, created_your_
     queue_watcher = TemporaryQueueWatcher(test_rabbitmq, RoutingKey.YOUR_AGGREGATE_SERVICE.value)
 
     controller = YourAggregateController()
-    request = VoidYourAggregateRequest.create_strictly(id=created_your_aggregate_id, doer={"id": "test-user-id"})
+    request = VoidYourAggregateRequest.create_strictly(
+        id=created_your_aggregate_id, doer={"id": "test-user-id"}
+    )
     your_aggregate_id = await controller.void_your_aggregate(request)
 
     your_aggregate: YourAggregateModel = (
-        (await test_db_session.execute(sa.select(YourAggregateModel).where(YourAggregateModel.id == your_aggregate_id)))
+        (
+            await test_db_session.execute(
+                sa.select(YourAggregateModel).where(YourAggregateModel.id == your_aggregate_id)
+            )
+        )
         .scalars()
         .one()
     )
     domain_event: DomainEventModel = (
-        (await test_db_session.execute(sa.select(DomainEventModel).order_by(DomainEventModel.created_at.desc())))
+        (
+            await test_db_session.execute(
+                sa.select(DomainEventModel).order_by(DomainEventModel.created_at.desc())
+            )
+        )
         .scalars()
         .first()
     )
