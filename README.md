@@ -29,11 +29,16 @@ pip install -r requirements_local.txt
 ### Add bounded context
 1. `python /path/to/ddd-service-template/copy_tool.py add bounded_context_name`
 2. start coding
+    - value object
+    - event
     - entity
-    - value object, event
-    - repository, orm
+    - use case
+    - orm
+    - repository
     - controller
-    - handler, openapi
+    - event handler
+    - handler
+    - swagger (openapi)
 
 ### Add message queue exchange handler
 1. `python /path/to/ddd-service-template/copy_tool.py add_message_queue_handler exchange_name`
