@@ -1,4 +1,9 @@
 # DDD Service Template
+Based on Domain-Driven Design and Event-Driven architecture, and using the following technologies
+- web framework: [Connexion](https://connexion.readthedocs.io/en/stable/)
+- server workers: [Gunicorn](https://docs.gunicorn.org/en/latest/index.html) with [Uvicorn worker](https://github.com/Kludex/uvicorn-worker)
+- ORM: [SQLAlchemy](https://docs.sqlalchemy.org/en/20/)
+- database migration tool: [Alembic](https://alembic.sqlalchemy.org/en/latest/)
 
 ## Develop new service
 ### Prepare Python virtual env
