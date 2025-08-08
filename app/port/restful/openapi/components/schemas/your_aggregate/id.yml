@@ -1,0 +1,39 @@
+components:
+  schemas:
+    Detail:
+      type: object
+      properties:
+        id:
+          description: ID
+          type: string
+        yourValueObject:
+          description: your value object
+          type: object
+          required:
+            - propertyA
+            - propertyB
+          properties:
+            propertyA:
+              description: 參數A
+              type: string
+            propertyB:
+              description: 參數B
+              type: integer
+        status:
+          description: 狀態
+          $ref: enum.yml#/components/schemas/Status
+        operationHistories:
+          description: 操作紀錄
+          type: array
+          items:
+            $ref: operation_history.yml
+        creator:
+          description: 建立人
+          $ref: ../auth.yml#/components/schemas/User
+        createdAt:
+          description: 建立時間 utc timestamp
+          type: number
+        updatedAt:
+          description: 更新時間 utc timestamp
+          type: number
+          nullable: true

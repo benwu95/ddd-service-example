@@ -1,0 +1,15 @@
+description: 4XX
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        code:
+          description: for i18n
+          type: string
+          nullable: true
+        traceId:
+          description: trace ID
+          type: string
+        data:
+          description: 詳細結果

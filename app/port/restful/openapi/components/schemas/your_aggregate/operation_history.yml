@@ -1,0 +1,25 @@
+type: object
+properties:
+  type:
+    $ref: enum.yml#/components/schemas/OperationHistoryType
+  data:
+    description: 資料
+    type: array
+    items:
+      type: object
+      properties:
+        field:
+          description: 欄位名稱
+          type: string
+        before:
+          description: 舊值
+          nullable: true
+        after:
+          description: 新值
+          nullable: true
+  doer:
+    description: 執行人
+    $ref: ../auth.yml#/components/schemas/User
+  createdAt:
+    description: 建立時間 utc timestamp
+    type: number

@@ -1,0 +1,29 @@
+get:
+  operationId: app.port.restful.handler.your_bounded_context.your_aggregate_handler.get_your_aggregate
+  summary: 取得資料
+  description: 取得資料
+  tags:
+    - Your Aggregate
+  parameters:
+    - name: your_aggregate_id
+      description: id
+      in: path
+      required: true
+      schema:
+        type: string
+      style: simple
+  responses:
+    '200':
+      description: 詳細資料
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: ../../components/responses/default.yml
+              - properties:
+                  data:
+                    $ref: ../../components/schemas/your_aggregate/id.yml#/components/schemas/Detail
+    '4XX':
+      $ref: ../../components/responses/4XX.yml
+  security:
+    - jwt: [ 'secret' ]

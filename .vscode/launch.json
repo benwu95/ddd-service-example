@@ -1,0 +1,15 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python Debugger: Launch Server without gunicorn",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/app/restful_server.py",
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}"
+            }
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+type: object
+properties:
+  code:
+    description: for i18n
+    type: string
+    nullable: true
+  traceId:
+    description: trace ID
+    type: string
+  data:
+    description: 搜尋結果
+    type: object
+    properties:
+      total:
+        description: 總筆數
+        type: integer
+      results:
+        description: 結果
+        type: array

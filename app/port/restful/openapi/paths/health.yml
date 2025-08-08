@@ -1,0 +1,10 @@
+get:
+  operationId: app.port.restful.handler.health.health
+  summary: health check
+  tags:
+    - health
+  responses:
+    '200':
+      description: ''
+    '4XX':
+      $ref: ../components/responses/4XX.yml

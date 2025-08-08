@@ -1,0 +1,39 @@
+openapi: '3.0.2'
+
+info:
+  title: Your Service API
+  version: '1.0'
+
+servers:
+  - url: /api
+
+paths:
+  /health:
+    $ref: paths/health.yml
+
+  /yourAggregates:
+    $ref: paths/your_aggregates/your_aggregates.yml
+
+  /yourAggregates/command:
+    $ref: paths/your_aggregates/command.yml
+
+  /yourAggregates/export:
+    $ref: paths/your_aggregates/export.yml
+
+  /yourAggregates/{your_aggregate_id}:
+    $ref: paths/your_aggregates/id.yml
+
+tags:
+  - name: health
+  - name: Your Aggregate
+
+components:
+  schemas:
+    YourAggregate:
+      $ref: components/schemas/your_aggregate/id.yml#/components/schemas/Detail
+  securitySchemes:
+    jwt:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      x-bearerInfoFunc: app.port.restful.handler.token.decode_token

@@ -1,0 +1,53 @@
+components:
+  schemas:
+    Response:
+      type: object
+      properties:
+        code:
+          description: for i18n
+          type: string
+          nullable: true
+        traceId:
+          description: trace ID
+          type: string
+        data:
+          type: object
+          properties:
+            success:
+              description: 成功訊息
+              type: array
+              items:
+                type: object
+                properties:
+                  payload:
+                    description: payload
+                    oneOf:
+                      - $ref: '#/components/schemas/PayloadObject'
+                      - $ref: '#/components/schemas/PayloadList'
+                  detail:
+                    description: 詳細訊息
+                    type: string
+                    nullable: true
+            failure:
+              description: 錯誤訊息
+              type: array
+              items:
+                type: object
+                properties:
+                  payload:
+                    description: payload
+                    oneOf:
+                      - $ref: '#/components/schemas/PayloadObject'
+                      - $ref: '#/components/schemas/PayloadList'
+                  detail:
+                    description: 詳細訊息
+                    type: string
+                    nullable: true
+
+    PayloadObject:
+      type: object
+
+    PayloadList:
+      type: array
+      items:
+        type: object

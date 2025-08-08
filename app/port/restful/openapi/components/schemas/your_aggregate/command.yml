@@ -1,0 +1,111 @@
+components:
+  schemas:
+    RequestBody:
+      type: object
+      required:
+        - cmd
+        - payload
+      properties:
+        cmd:
+          type: string
+          enum:
+            - CREATE
+            - UPDATE
+            - DELETE
+            - VOID
+        payload:
+          type: array
+          items:
+            type: object
+      oneOf:
+        - $ref: '#/components/schemas/Create'
+        - $ref: '#/components/schemas/Update'
+        - $ref: '#/components/schemas/Delete'
+        - $ref: '#/components/schemas/Void'
+
+    Create:
+      type: object
+      properties:
+        cmd:
+          type: string
+          enum:
+            - CREATE
+        payload:
+          type: array
+          items:
+            type: object
+            properties:
+              yourValueObject:
+                description: 建立參數
+                type: object
+                required:
+                  - propertyA
+                  - propertyB
+                properties:
+                  propertyA:
+                    description: 參數A
+                    type: string
+                  propertyB:
+                    description: 參數B
+                    type: integer
+
+    Update:
+      type: object
+      properties:
+        cmd:
+          type: string
+          enum:
+            - UPDATE
+        payload:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                description: ID
+                type: string
+              yourValueObject:
+                description: value object 參數
+                type: object
+                required:
+                  - propertyA
+                  - propertyB
+                properties:
+                  propertyA:
+                    description: 參數A
+                    type: string
+                  propertyB:
+                    description: 參數B
+                    type: integer
+
+    Delete:
+      type: object
+      properties:
+        cmd:
+          type: string
+          enum:
+            - DELETE
+        payload:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                description: ID
+                type: string
+
+    Void:
+      type: object
+      properties:
+        cmd:
+          type: string
+          enum:
+            - VOID
+        payload:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                description: ID
+                type: string

@@ -1,0 +1,22 @@
+post:
+  operationId: app.port.restful.handler.your_bounded_context.your_aggregate_handler.command
+  summary: Your Aggregate command
+  description: Your Aggregate command
+  tags:
+    - Your Aggregate
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/your_aggregate/command.yml#/components/schemas/RequestBody
+  responses:
+    '200':
+      description: ''
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/responses/command.yml#/components/schemas/Response
+    '4XX':
+      $ref: ../../components/responses/4XX.yml
+  security:
+    - jwt: [ 'secret' ]

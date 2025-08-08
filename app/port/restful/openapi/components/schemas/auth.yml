@@ -1,0 +1,36 @@
+components:
+  schemas:
+    Organization:
+      type: object
+      properties:
+        id:
+          description: organization id
+          type: string
+          nullable: true
+        name:
+          description: organization name
+          type: string
+          nullable: true
+
+    User:
+      type: object
+      properties:
+        id:
+          description: user id
+          type: string
+          nullable: true
+        organization:
+          description: user organization
+          $ref: '#/components/schemas/Organization'
+        name:
+          description: user name
+          type: string
+          nullable: true
+        email:
+          description: user email
+          type: string
+          nullable: true
+        mobile:
+          description: user mobile
+          type: string
+          nullable: true

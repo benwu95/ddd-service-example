@@ -1,0 +1,13 @@
+{
+    "recommendations": [
+        "ms-ceintl.vscode-language-pack-zh-hant",
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-python.pylint", 
+        "42Crunch.vscode-openapi",
+        "zxh404.vscode-proto3",
+        "ms-azuretools.vscode-docker",
+        "redhat.vscode-yaml",
+        "hashicorp.terraform"
+    ]
+}

@@ -1,0 +1,15 @@
+components:
+  schemas:
+    Status:
+      description: 狀態
+      type: string
+      enum:
+        - created
+        - voided
+    OperationHistoryType:
+      description: 操作類型
+      type: string
+      enum:
+        - created
+        - updated
+        - voided

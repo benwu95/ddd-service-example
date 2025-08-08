@@ -1,0 +1,5 @@
+pycodestyle
+pytest
+pytest-asyncio
+pytest-cov
+testcontainers
