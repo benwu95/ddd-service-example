@@ -5,7 +5,7 @@ import os
 from app.package_instance import message_queue_publisher
 
 wsgi_app = "app.restful_server:serve()"
-worker_class = "uvicorn_worker.UvicornH11Worker"  # ref: https://github.com/Kludex/uvicorn-worker/issues/22
+worker_class = "uvicorn_worker.UvicornWorker"
 workers = os.environ.get("GUNICORN_WORKERS", 2)
 timeout = os.environ.get("GUNICORN_TIMEOUT", 30)
 max_requests = 1000
