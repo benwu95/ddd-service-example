@@ -31,6 +31,14 @@ def example(data: QueueMessage):
 
     for d in data.data:
         try:
+            # example usage
             p = ExamplePayload.create(**d)
+            # request = ExampleRequest(
+            #     customer_name=p.customer_name,
+            #     trace_id=trace_id,
+            #     doer=doer,
+            # )
+            # asyncio.run(example_controller.example(request))
+            logger.info("example function complete")
         except Exception as e:
             logger.exception(e)
