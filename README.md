@@ -1,9 +1,10 @@
-# DDD Service Template
+# An example about DDD Service
 Based on Domain-Driven Design and Event-Driven architecture, and using the following technologies
 - web framework: [Connexion](https://connexion.readthedocs.io/en/stable/)
 - server workers: [Gunicorn](https://docs.gunicorn.org/en/latest/index.html) with [Uvicorn worker](https://github.com/Kludex/uvicorn-worker)
 - ORM: [SQLAlchemy](https://docs.sqlalchemy.org/en/20/)
 - database migration tool: [Alembic](https://alembic.sqlalchemy.org/en/latest/)
+- message queue: [pika](https://pika.readthedocs.io/en/stable/)
 
 ## Develop new service
 ### Prepare Python virtual env
@@ -18,7 +19,7 @@ pip install -r requirements_local.txt
 ```
 ### Init
 1. `cd /path/to/new-service`
-2. `python /path/to/ddd-service-template/copy_tool.py init`
+2. `python /path/to/ddd-service-example/copy_tool.py init`
 3. `pip install -r requirements.txt -r requirements_local.txt -r requirements_test.txt`
 4. update setting in `app/config.py`
     - `database_url`
@@ -27,7 +28,7 @@ pip install -r requirements_local.txt
     - `rabbitmq_consumer_name`
 
 ### Add bounded context
-1. `python /path/to/ddd-service-template/copy_tool.py add bounded_context_name`
+1. `python /path/to/ddd-service-example/copy_tool.py add bounded_context_name`
 2. start coding
     - value object
     - event
@@ -41,7 +42,7 @@ pip install -r requirements_local.txt
     - swagger (openapi)
 
 ### Add message queue exchange handler
-1. `python /path/to/ddd-service-template/copy_tool.py add_message_queue_handler exchange_name`
+1. `python /path/to/ddd-service-example/copy_tool.py add_message_queue_handler exchange_name`
 2. start coding
     - payload
     - exchange handler
