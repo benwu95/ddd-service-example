@@ -34,7 +34,6 @@ class DefaultResponse(JSONResponse):
 
 
 class ResponseMixin:
-
     @staticmethod
     def accepted(detail: Any = "Accepted") -> DefaultResponse:
         return DefaultResponse(DefaultContent("Accepted", detail), status_code=202)
@@ -61,14 +60,12 @@ class ResponseMixin:
 
 
 class ApiResponse(ResponseMixin):
-
     @staticmethod
     def success(detail: Any = None, status_code: int = 200) -> DefaultResponse:
         return DefaultResponse(DefaultContent("OK", detail), status_code=status_code)
 
 
 class FileResponse(ResponseMixin):
-
     @staticmethod
     def success(file: BytesIO, file_name: str, content_type: str) -> StreamingResponse:
         file.seek(0)
