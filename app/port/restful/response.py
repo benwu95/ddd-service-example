@@ -3,8 +3,6 @@ from io import BytesIO
 from typing import Any
 
 import orjson
-from connexion.exceptions import ProblemException
-from connexion.lifecycle import ConnexionRequest, ConnexionResponse
 from dataclass_mixins import to_camel_case_json
 from starlette.responses import JSONResponse, StreamingResponse
 
@@ -33,17 +31,6 @@ class DefaultResponse(JSONResponse):
                 "data": convert(content.data),
             }
         )
-
-
-def render_problem_exception(request: ConnexionRequest, ex: Exception) -> ConnexionResponse:
-    if isinstance(ex, ProblemException):
-        code = ex.title or "Internal Server Error"
-        if isinstance(ex.ext, dict):
-            code = ex.ext.get("code", code)
-        resp = DefaultResponse(DefaultContent(code, ex.detail), status_code=ex.status)
-    else:
-        resp = ApiResponse.error(str(ex))
-    return ConnexionResponse(resp.status_code, resp.media_type, resp.media_type, resp.body)
 
 
 class ResponseMixin:
