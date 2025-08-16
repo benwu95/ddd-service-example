@@ -5,10 +5,6 @@ connexion[swagger-ui,uvicorn]==3.2.0
 openapi-spec-validator==0.7.1
 prance==25.4.8.0
 
-# grpc
-grpcio<2
-grpcio-tools<2
-
 # database
 SQLAlchemy[asyncio]==2.0.40
 psycopg[binary,pool]==3.2.9
@@ -19,7 +15,7 @@ httpx==0.28.1
 pendulum==3.1.0
 retrying==1.3.4
 cachetools==5.5.2
-orjson==3.11.1
+orjson==3.11.2
 
 # packages
 pika==1.3.2  # message queue
