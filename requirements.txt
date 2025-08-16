@@ -10,7 +10,7 @@ SQLAlchemy[asyncio]==2.0.40
 psycopg[binary,pool]==3.2.9
 
 # core
-git+https://github.com/benwu95/dataclass-mixins.git@0.0.2
+git+https://github.com/benwu95/dataclass-mixins.git@v0.0.3
 httpx==0.28.1
 pendulum==3.1.0
 retrying==1.3.4
