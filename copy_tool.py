@@ -13,7 +13,9 @@ def init():
     subprocess.run(["alembic", "init", cwd.joinpath("alembic")])
 
     # copy
-    ignore_patterns = shutil.ignore_patterns("__pycache__", "tests", "tests.py", ".coverage", ".pytest_cache")
+    ignore_patterns = shutil.ignore_patterns(
+        "__pycache__", "tests", "tests.py", ".coverage", ".pytest_cache"
+    )
     copy_templates = [
         ".vscode",
         "alembic/env.py",
@@ -68,7 +70,7 @@ def init():
         open(cwd.joinpath("Makefile"), "w") as fout,
     ):
         content = fin.read()
-        content = content.replace("ddd-service-template", cwd.name)
+        content = content.replace("ddd-service", cwd.name)
         fout.write(content)
     with (
         open(root.joinpath("app/config.py"), "r") as fin,
@@ -248,7 +250,9 @@ if __name__ == "__main__":
     add_parser = sub_parsers.add_parser("add", help="add new bounded context")
     add_parser.add_argument("name", help="snake case naming")
 
-    add_message_queue_parser = sub_parsers.add_parser("add_message_queue_handler", help="add new message queue handler")
+    add_message_queue_parser = sub_parsers.add_parser(
+        "add_message_queue_handler", help="add new message queue handler"
+    )
     add_message_queue_parser.add_argument("name", help="snake case naming")
 
     args = main_parser.parse_args()

@@ -15,7 +15,7 @@ PUBLISH_DATE := $(shell TZ='Asia/Taipei' date +%Y%m%d-%H%M%S)
 PUBLISH_DATE_TIMESTAMP := $(shell TZ='Asia/Taipei' date +%s)
 COMPONENT_VERSION := $(shell git describe --always --tags)
 GAR := 
-IMAGE_NAME := ddd-service-template
+IMAGE_NAME := ddd-service
 K8S_NAMESPACE := default
 
 export PYTHONPATH = ./
