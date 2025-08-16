@@ -18,7 +18,7 @@ def get_log_formatter() -> logging.Formatter:
             r'"message": %(message)s'
         )
     return logging.Formatter(
-        r"[%(asctime)s] %(levelname)s " r"[%(filename)s:%(lineno)d %(funcName)s] %(message)s"
+        r"[%(asctime)s] %(levelname)s [%(filename)s:%(lineno)d %(funcName)s] %(message)s"
     )
 
 
