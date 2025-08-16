@@ -3,7 +3,6 @@ import uuid
 from contextvars import ContextVar
 from dataclasses import dataclass
 
-from connexion import request
 from dataclass_mixins import DataclassMixin
 from werkzeug.local import LocalProxy
 
@@ -12,15 +11,7 @@ _trace_id.set(None)
 
 
 def set_trace_id(trace_id: str | None = None):
-    t = trace_id
-    if t is None:
-        try:
-            t = request.headers.get("X-Trace-Id")
-        except Exception:
-            pass
-    if t is None:
-        t = str(uuid.uuid4())
-    _trace_id.set(t)
+    _trace_id.set(trace_id or str(uuid.uuid4()))
 
 
 def get_trace_id() -> str:

@@ -50,7 +50,7 @@ class LoggingMiddleware:
         set_request_start_time()
         set_session_provider()
         set_message_queue_publisher()
-        set_trace_id()
+        set_trace_id(request.headers.get("X-Trace-Id"))
 
         await self.app(scope, receive_wrapper, send_wrapper)
 
