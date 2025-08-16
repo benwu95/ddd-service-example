@@ -1,7 +1,7 @@
 import json
 import time
 
-from connexion import request
+from starlette.requests import Request
 from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
 from app.adapter.repository.base import set_session_provider
@@ -25,6 +25,7 @@ class LoggingMiddleware:
         if scope["type"] != "http":
             return await self.app(scope, receive, send)
 
+        request = Request(scope, receive)
         extra_info = {"body": {}, "status": None, "resp": {}}
 
         async def receive_wrapper():
@@ -53,13 +54,13 @@ class LoggingMiddleware:
 
         await self.app(scope, receive_wrapper, send_wrapper)
 
-        await self.log_request(extra_info)
+        self.log_request(request, extra_info)
         set_token_info()
 
-    async def log_request(self, extra_info: dict):
+    def log_request(self, request: Request, extra_info: dict):
         url = request.url.path
         method = request.method
-        remote_addr = request.client.host
+        remote_addr = request.client.host if request.client else "unknown"
         status_code = extra_info["status"]
         protocol = f'HTTP/{request.scope["http_version"]}'
         http_request_gcloud_info = {
