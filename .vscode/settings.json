@@ -1,11 +1,22 @@
 {
+    "editor.renderWhitespace": "all",
     "[python]": {
         "editor.defaultFormatter": "ms-python.black-formatter",
         "editor.formatOnSave": true,
+        "editor.formatOnType": true,
         "editor.codeActionsOnSave": {
-            "source.organizeImports": "explicit"
-        },
+            "source.fixAll": "explicit",
+            "source.unusedImports": "explicit",
+            "source.fixall.pylance": "explicit",
+            "source.organizeImports": "explicit",
+        }
     },
+    "python.analysis.typeCheckingMode": "standard",
+    "python.analysis.autoFormatStrings": true,
+    "python.analysis.autoImportCompletions": true,
+    "python.analysis.completeFunctionParens": true,
+    "python.analysis.inlayHints.functionReturnTypes": true,
+    "python.analysis.inlayHints.variableTypes": true,
     "pylint.args": [
         "--disable=C0111,C0103,E1121,C0301"
     ],
