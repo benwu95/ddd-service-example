@@ -37,17 +37,18 @@ def init():
         "app/package_instance.py",
         "app/restful_server.py",
         "app/trace.py",
+        "tests/conftest.py",
+        "tests/utils/rabbitmq_test_helper.py",
         "packages",
         ".gitignore",
+        "Dockerfile",
         "alembic.ini",
         "gunicorn.conf.py",
+        "pyproject.toml",
         "requirements_local.txt",
         "requirements_test.txt",
         "requirements.txt",
         "startup.sh",
-        "tests/conftest.py",
-        "tests/utils/rabbitmq_test_helper.py",
-        "tox.ini",
     ]
     for template in copy_templates:
         if not cwd.joinpath(template).parent.exists():
