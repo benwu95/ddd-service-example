@@ -1,7 +1,7 @@
 import pendulum
 from pendulum.datetime import DateTime
 from sqlalchemy import and_, or_
-from sqlalchemy.orm import InstrumentedAttribute, load_only
+from sqlalchemy.orm import load_only
 
 from app.adapter.repository.base import RepositoryBase, SearchKeyField
 from app.adapter.repository.orm import (
@@ -22,30 +22,18 @@ from app.core.your_bounded_context.domain.value_object.your_aggregate_value_obje
 )
 
 
-class YourAggregateRepository(RepositoryBase, YourAggregateRepositoryInterface):
-    @staticmethod
-    def entity_name() -> str:
-        return "Your Aggregate"
-
-    @staticmethod
-    def model_class() -> type[YourAggregateModel]:
-        return YourAggregateModel
-
-    @staticmethod
-    def archive_model_class() -> type[YourAggregateArchiveModel]:
-        return YourAggregateArchiveModel
-
-    @staticmethod
-    def search_key_fields() -> dict[str, SearchKeyField]:
-        return {
-            "your_value_object_a": SearchKeyField(
-                YourAggregateModel.your_value_object, json_path="$.property_a"
-            )
-        }
-
-    @staticmethod
-    def sort_by_fields() -> dict[str, InstrumentedAttribute]:
-        return {"created_at": YourAggregateModel.created_at}
+class YourAggregateRepository(
+    RepositoryBase[YourAggregateModel, YourAggregateArchiveModel], YourAggregateRepositoryInterface
+):
+    entity_name = "Your Aggregate"
+    model_class = YourAggregateModel
+    archive_model_class = YourAggregateArchiveModel
+    search_key_fields = {
+        "your_value_object_a": SearchKeyField(
+            YourAggregateModel.your_value_object, json_path="$.property_a"
+        )
+    }
+    sort_by_fields = {"created_at": YourAggregateModel.created_at}
 
     @staticmethod
     def model_to_entity(model: YourAggregateModel) -> YourAggregate:

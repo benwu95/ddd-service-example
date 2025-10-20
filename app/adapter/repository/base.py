@@ -3,6 +3,7 @@ import re
 import uuid
 from contextvars import ContextVar
 from dataclasses import dataclass
+from typing import Generic, TypeVar
 
 import sqlalchemy as sa
 from sqlalchemy.dialects.postgresql import JSONB, JSONPATH
@@ -65,29 +66,19 @@ class SearchKeyField:
     json_path: str | None = None
 
 
-class RepositoryBase:
-    def __init__(self, session_provider: SessionProvider):
-        self.session_provider = session_provider
+MT = TypeVar("MT")  # Model Type
+AMT = TypeVar("AMT", bound="ArchiveMixin")  # Archive Model Type
 
-    @staticmethod
-    def entity_name() -> str:
-        raise NotImplementedError()
 
-    @staticmethod
-    def model_class() -> type:
-        raise NotImplementedError()
+class RepositoryBase(Generic[MT, AMT]):
+    entity_name: str
+    model_class: type[MT]
+    archive_model_class: type[AMT]
+    search_key_fields: dict[str, SearchKeyField]
+    sort_by_fields: dict[str, InstrumentedAttribute]
 
-    @staticmethod
-    def archive_model_class() -> type[ArchiveMixin]:
-        raise NotImplementedError()
-
-    @staticmethod
-    def search_key_fields() -> dict[str, SearchKeyField]:
-        raise NotImplementedError()
-
-    @staticmethod
-    def sort_by_fields() -> dict[str, InstrumentedAttribute]:
-        raise NotImplementedError()
+    def __init__(self, session_provider_: SessionProvider):
+        self.session_provider = session_provider_
 
     @staticmethod
     def model_to_entity(model):
@@ -125,12 +116,12 @@ class RepositoryBase:
             m = pattern.match(sort)
             if m:
                 order, field = m.groups()
-                if field in cls.sort_by_fields() and field not in used_fields:
+                if field in cls.sort_by_fields and field not in used_fields:
                     used_fields.add(field)
                     if order == "-":
-                        sort_by_exp.append(sa.desc(cls.sort_by_fields()[field]))
+                        sort_by_exp.append(sa.desc(cls.sort_by_fields[field]))
                     else:
-                        sort_by_exp.append(sa.asc(cls.sort_by_fields()[field]))
+                        sort_by_exp.append(sa.asc(cls.sort_by_fields[field]))
         return sort_by_exp
 
     @property
@@ -138,19 +129,19 @@ class RepositoryBase:
         return self.session_provider.session
 
     async def _get_model(self, pkey):
-        return await self.session.get(self.model_class(), pkey)
+        return await self.session.get(self.model_class, pkey)
 
     async def _load(self, pkey, lock: bool):
         try:
             if lock:
-                model = await self.session.get(self.model_class(), pkey, with_for_update=True)
+                model = await self.session.get(self.model_class, pkey, with_for_update=True)
             else:
                 model = await self._get_model(pkey)
         except Exception:
             model = None
 
         if not model:
-            raise NoResultFound(f"{self.entity_name()} {pkey} not found")
+            raise NoResultFound(f"{self.entity_name} {pkey} not found")
 
         return self.model_to_entity(model)
 
@@ -170,7 +161,7 @@ class RepositoryBase:
             search_key_filters = []
             for search_key_field in search_key_fields:
                 f, search_key_regexp = self.create_search_key_regexp(search_key_field, search_keys)
-                s = self.search_key_fields().get(f)
+                s = self.search_key_fields.get(f)
                 if s:
                     if isinstance(s.column.type, JSONB):
                         search_key_filters.append(
@@ -187,8 +178,8 @@ class RepositoryBase:
             if search_key_filters:
                 q_filters.append(sa.or_(*search_key_filters))
 
-        total_stmt = sa.select(sa.func.count()).select_from(self.model_class()).where(*q_filters)
-        q_stmt = sa.select(self.model_class()).where(*q_filters)
+        total_stmt = sa.select(sa.func.count()).select_from(self.model_class).where(*q_filters)
+        q_stmt = sa.select(self.model_class).where(*q_filters)
 
         sort_by_exp = self.create_sort_by_exp(sort_by)
         if not sort_by_exp:
@@ -211,7 +202,7 @@ class RepositoryBase:
         return total, list(q)
 
     def _archive(self, model, event: DomainEvent | None):
-        archive_model = self.archive_model_class()()
+        archive_model = self.archive_model_class()
         archive_model.archive_id = str(uuid.uuid4())
         if event:
             archive_model.doer = event.doer.serialize()
