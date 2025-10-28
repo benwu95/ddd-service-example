@@ -20,11 +20,11 @@ class SearchResult:
 class YourAggregateRepositoryInterface(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     async def load_your_aggregate(self, your_aggregate_id: str) -> YourAggregate:
-        raise NotImplementedError
+        pass
 
     @abc.abstractmethod
     async def save_your_aggregate(self, your_aggregate: YourAggregate):
-        raise NotImplementedError
+        pass
 
     # For string parameters, prefer using `list[str] | None`,
     # and use plural or collective nouns for naming
