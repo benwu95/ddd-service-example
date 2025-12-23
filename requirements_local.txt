@@ -1,5 +1,4 @@
 alembic
 debugpy
-black
-isort
+pre-commit
 ruamel.yaml

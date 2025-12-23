@@ -6,3 +6,12 @@ from .message_queue import (
     QueueHandler,
     QueueMessage,
 )
+
+__all__ = [
+    "MessageQueueConnection",
+    "MessageQueueConsumerInterface",
+    "MessageQueuePublisherInterface",
+    "OperationType",
+    "QueueHandler",
+    "QueueMessage",
+]

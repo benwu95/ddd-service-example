@@ -1,8 +1,26 @@
-[tool.black]
-line-length = 100
+[project]
+name = "ddd-service-example"
+requires-python = ">=3.13"
 
-[tool.isort]
-profile = "black"
+# https://docs.astral.sh/ruff/settings/#top-level
+[tool.ruff]
+line-length = 100
+include = ["pyproject.toml", "app/**/*.py", "packages/**/*.py", "tests/**/*.py"]
+exclude = ["alembic/versions/**"]
+
+# https://docs.astral.sh/ruff/settings/#lint
+[tool.ruff.lint]
+select = [
+    "I",    # isort
+    "PL",   # Pylint
+    "RUF",  # Ruff
+    "UP",   # pyupgrade
+]
+ignore = ["PLR0912", "PLR0913", "UP046"]
+
+# https://docs.astral.sh/ruff/settings/#format
+[tool.ruff.format]
+quote-style = "double"
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"

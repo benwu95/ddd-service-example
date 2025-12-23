@@ -38,7 +38,7 @@ all:
 
 check-style:
 	@echo "check-style"
-	pycodestyle --ignore=E203,E265,E402,E501,E722,W503 app/ tests/
+	ruff check
 
 unit-test:
 	@echo "unit-test"
@@ -103,9 +103,9 @@ local-run-consumer:
 local-test:
 	pytest tests --cov -s --cov-report=term-missing
 
-isort-and-black:
-	isort app/ tests/ packages/
-	black app/ tests/ packages/
+lint-and-format:
+	ruff check --fix
+	ruff format
 
 migrate-database:
 	alembic upgrade head

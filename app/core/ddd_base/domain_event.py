@@ -1,8 +1,8 @@
 import dataclasses
 import enum
 import uuid
+from collections.abc import Iterable
 from functools import cached_property
-from typing import Iterable
 
 import pendulum
 from dataclass_mixins import DataclassMixin

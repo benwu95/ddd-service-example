@@ -1,4 +1,4 @@
-pycodestyle
+ruff==0.14.10
 pytest
 pytest-asyncio
 pytest-cov

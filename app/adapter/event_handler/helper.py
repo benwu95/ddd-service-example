@@ -1,5 +1,5 @@
+from collections.abc import Callable
 from functools import wraps
-from typing import Callable
 
 from sqlalchemy.ext.asyncio import AsyncSession
 

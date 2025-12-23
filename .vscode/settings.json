@@ -1,14 +1,14 @@
 {
     "editor.renderWhitespace": "boundary",
     "[python]": {
-        "editor.defaultFormatter": "ms-python.black-formatter",
+        "editor.defaultFormatter": "charliermarsh.ruff",
         "editor.formatOnSave": true,
         "editor.formatOnType": true,
         "editor.codeActionsOnSave": {
-            "source.fixAll": "explicit",
+            "source.fixAll.pylance": "explicit",
+            "source.fixAll.ruff": "explicit",
+            "source.organizeImports.ruff": "explicit",
             "source.unusedImports": "explicit",
-            "source.fixall.pylance": "explicit",
-            "source.organizeImports": "explicit",
         }
     },
     "python.analysis.typeCheckingMode": "standard",
@@ -17,14 +17,6 @@
     "python.analysis.completeFunctionParens": true,
     "python.analysis.inlayHints.functionReturnTypes": true,
     "python.analysis.inlayHints.variableTypes": true,
-    "pylint.args": [
-        "--disable=C0111,C0103,E1121,C0301"
-    ],
-    "isort.args": [
-        "--profile",
-        "black",
-        "--check"
-    ],
     "python.testing.pytestArgs": [
         "tests",
         "--cov=app/adapter",

@@ -3,7 +3,7 @@ import re
 import uuid
 from contextvars import ContextVar
 from dataclasses import dataclass
-from typing import Generic, TypeVar
+from typing import ClassVar, Generic, TypeVar
 
 import sqlalchemy as sa
 from sqlalchemy.dialects.postgresql import JSONB, JSONPATH
@@ -74,8 +74,8 @@ class RepositoryBase(Generic[MT, AMT]):
     entity_name: str
     model_class: type[MT]
     archive_model_class: type[AMT]
-    search_key_fields: dict[str, SearchKeyField]
-    sort_by_fields: dict[str, InstrumentedAttribute]
+    search_key_fields: ClassVar[dict[str, SearchKeyField]]
+    sort_by_fields: ClassVar[dict[str, InstrumentedAttribute]]
 
     def __init__(self, session_provider_: SessionProvider):
         self.session_provider = session_provider_

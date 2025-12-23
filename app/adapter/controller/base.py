@@ -1,7 +1,8 @@
 import uuid
+from collections.abc import Iterable
 from dataclasses import dataclass
 from functools import wraps
-from typing import Iterable, Self
+from typing import Self
 
 from dataclass_mixins import DataclassMixin, camel_to_snake_case
 from pendulum.datetime import DateTime

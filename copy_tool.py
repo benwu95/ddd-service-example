@@ -1,8 +1,8 @@
 import argparse
 import shutil
 import subprocess
+from collections.abc import Iterable
 from pathlib import Path
-from typing import Iterable
 
 root = Path(__file__).parent.resolve()
 cwd = Path().cwd()
@@ -10,7 +10,7 @@ cwd = Path().cwd()
 
 def init():
     # init alembic
-    subprocess.run(["alembic", "init", cwd.joinpath("alembic")])
+    subprocess.run(["alembic", "init", cwd.joinpath("alembic")], check=False)
 
     # copy
     ignore_patterns = shutil.ignore_patterns(
@@ -67,14 +67,14 @@ def init():
     # copy and update service name
     service_name = cwd.name
     with (
-        open(root.joinpath("Makefile"), "r") as fin,
+        open(root.joinpath("Makefile")) as fin,
         open(cwd.joinpath("Makefile"), "w") as fout,
     ):
         content = fin.read()
         content = content.replace("ddd-service", cwd.name)
         fout.write(content)
     with (
-        open(root.joinpath("app/config.py"), "r") as fin,
+        open(root.joinpath("app/config.py")) as fin,
         open(cwd.joinpath("app/config.py"), "w") as fout,
     ):
         content = fin.read()
@@ -82,18 +82,18 @@ def init():
         content = content.replace("ddd_service", service_name.replace("-", "_"))
         fout.write(content)
     with (
-        open(root.joinpath("app/message_queue_consumer.py"), "r") as fin,
+        open(root.joinpath("app/message_queue_consumer.py")) as fin,
         open(cwd.joinpath("app/message_queue_consumer.py"), "w") as fout,
     ):
         content = fin.read()
         content = content.replace("ddd-service", service_name)
         fout.write(content)
     with (
-        open(root.joinpath("app/port/restful/openapi/api.yml"), "r") as fin,
+        open(root.joinpath("app/port/restful/openapi/api.yml")) as fin,
         open(cwd.joinpath("app/port/restful/openapi/api.yml"), "w") as fout,
     ):
         content = fin.read()
-        content = content.replace("Your Service API", f'{cwd.name.replace("-", " ").title()} API')
+        content = content.replace("Your Service API", f"{cwd.name.replace('-', ' ').title()} API")
         fout.write(content)
 
     # create __init__.py
@@ -162,7 +162,7 @@ def add(name: str):
                 if not dst.parent.exists():
                     dst.parent.mkdir(parents=True, exist_ok=True)
 
-                with open(path, "r") as fin, open(dst, "w") as fout:
+                with open(path) as fin, open(dst, "w") as fout:
                     content = fin.read()
                     content = content.replace("your_bounded_context", name)
                     content = content.replace("your_aggregate", name)
@@ -222,7 +222,7 @@ def add_message_queue_handler(name: str):
                 if not dst.parent.exists():
                     dst.parent.mkdir(parents=True, exist_ok=True)
 
-                with open(path, "r") as fin, open(dst, "w") as fout:
+                with open(path) as fin, open(dst, "w") as fout:
                     content = fin.read()
                     content = content.replace("your_exchange", name)
                     fout.write(content)

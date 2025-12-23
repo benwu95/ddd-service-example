@@ -1,3 +1,5 @@
+from typing import ClassVar
+
 import pendulum
 from pendulum.datetime import DateTime
 from sqlalchemy import and_, or_
@@ -28,12 +30,12 @@ class YourAggregateRepository(
     entity_name = "Your Aggregate"
     model_class = YourAggregateModel
     archive_model_class = YourAggregateArchiveModel
-    search_key_fields = {
+    search_key_fields: ClassVar = {
         "your_value_object_a": SearchKeyField(
             YourAggregateModel.your_value_object, json_path="$.property_a"
         )
     }
-    sort_by_fields = {"created_at": YourAggregateModel.created_at}
+    sort_by_fields: ClassVar = {"created_at": YourAggregateModel.created_at}
 
     @staticmethod
     def model_to_entity(model: YourAggregateModel) -> YourAggregate:

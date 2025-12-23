@@ -1,6 +1,7 @@
 from collections import defaultdict
+from collections.abc import Callable, Coroutine, Iterable
 from functools import wraps
-from typing import Any, Callable, Coroutine, Iterable
+from typing import Any
 
 from app.core.ddd_base.domain_event import DomainEvent
 from app.core.ddd_base.exception import InvalidEventRegisterError
@@ -15,7 +16,9 @@ class EventBus:
         )
         self._subscribed_for_all: set[AsyncEventHandler] = set()
 
-    def subscribe(self, event_types: list[type[DomainEvent]] = None, all_event=False):
+    def subscribe(
+        self, event_types: list[type[DomainEvent]] | None = None, all_event: bool = False
+    ):
         """Decorator for subscribing a function to a specific event.
         :param event_types: Type of events to subscribe to.
         :return: The outer function.
@@ -29,7 +32,7 @@ class EventBus:
 
             if all_event:
                 self._subscribed_for_all.add(func)
-            else:
+            elif event_types:
                 for event_type in event_types:
                     self._subscribed_for_events[event_type].add(func)
 

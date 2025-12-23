@@ -5,8 +5,8 @@ from .use_case import UseCaseBase
 
 __all__ = [
     "AggregateRoot",
-    "User",
     "DomainEvent",
-    "event_bus",
     "UseCaseBase",
+    "User",
+    "event_bus",
 ]

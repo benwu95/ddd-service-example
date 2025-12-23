@@ -1,1 +1,1 @@
-import app.adapter.event_handler
+from app.adapter.event_handler import *

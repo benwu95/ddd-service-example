@@ -1,6 +1,7 @@
 import json
 import time
 
+from starlette import status
 from starlette.requests import Request
 from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
@@ -62,7 +63,7 @@ class LoggingMiddleware:
         method = request.method
         remote_addr = request.client.host if request.client else "unknown"
         status_code = extra_info["status"]
-        protocol = f'HTTP/{request.scope["http_version"]}'
+        protocol = f"HTTP/{request.scope['http_version']}"
         http_request_gcloud_info = {
             "requestMethod": method,
             "requestUrl": url,
@@ -73,7 +74,9 @@ class LoggingMiddleware:
         }
         body = extra_info["body"]
         resp = {}
-        if (method == "POST" and url not in self.no_log_post_urls) or status_code >= 400:
+        if (
+            method == "POST" and url not in self.no_log_post_urls
+        ) or status_code >= status.HTTP_400_BAD_REQUEST:
             resp = extra_info["resp"]
         if request_start_time:
             http_request_gcloud_info["latency"] = f"{time.time() - request_start_time:6f}s"

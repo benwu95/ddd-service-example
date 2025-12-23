@@ -1,6 +1,6 @@
 import dataclasses
+from collections.abc import Iterable
 from io import BytesIO
-from typing import Iterable
 
 from openpyxl import Workbook
 from openpyxl.cell import Cell
@@ -70,9 +70,10 @@ def parse_sheet_header_row(header_row: Iterable[Cell | str], dc_type: type) -> d
     fields_mapping = {f.metadata.get("alias", f.name): f.name for f in dataclasses.fields(dc_type)}
     result = {}
     for i, header in enumerate(header_row):
+        v = None
         if isinstance(header, Cell):
-            header = header.value
-        header = str(header or "").strip()
-        if header in fields_mapping:
-            result[i] = fields_mapping[header]
+            v = header.value
+        v = str(v or "").strip()
+        if v in fields_mapping:
+            result[i] = fields_mapping[v]
     return result
