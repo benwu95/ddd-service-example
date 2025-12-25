@@ -1,1 +1,3 @@
-from app.adapter.event_handler import *
+import importlib
+
+importlib.import_module("app.adapter.event_handler")
